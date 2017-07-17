@@ -675,6 +675,8 @@ Pab verb rtr retourner retourne retournent retourné retournant -- return
 Pab verb lls illustrer illustre illustrent illustré illustrant
 
 
+" We can't write `:Abolish` inside vimrc, because when it's initially sourced,
+" the plugin hasn't been sourced yet. So, we use it in this plugin instead.
 Abolish teh   the
 
 
