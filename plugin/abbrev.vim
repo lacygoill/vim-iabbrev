@@ -229,10 +229,6 @@ fu! s:duplicates() abort
 endfu
 
 
-cnorea <expr> dig getcmdtype() ==# ':' && getcmdpos() == 4 ? 'verb Digraphs!' : 'dig'
-cnorea <expr> ucs getcmdtype() ==# ':' && getcmdpos() == 4 ? 'UnicodeSearch'  : 'ucs'
-cnorea <expr> ecoh getcmdtype() =~ ':' && getcmdpos() == 5 ? 'echo'           : 'ecoh'
-
 let [ s:adj, s:adv, s:noun, s:verb ] = [ {}, {}, {}, {} ]
 " s:expand_adj() "{{{
 
