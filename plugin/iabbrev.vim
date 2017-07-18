@@ -321,7 +321,7 @@ fu! s:expand_noun(abbr,expansion) abort
         if s:noun[a:abbr].english ==# a:abbr
             return a:abbr
         endif
-        return s:noun[a:abbr].english.(prev_word =~# '\v\c^%(most|some|th[e|o]se|various)$' ? 's' : '')
+        return s:noun[a:abbr].english.(prev_word =~# '\v\c^%(most|some|th[e|o]se|various|\d)$' ? 's' : '')
     else
         "                                                                        ┌─ digit
         "                                                                        │
