@@ -325,7 +325,7 @@ fu! s:expand_noun(abbr,expansion) abort
     else
         "                                                                        ┌─ digit
         "                                                                        │
-        if prev_word =~# '\v\c^%(un|l|le|ce%(tte)?|une|[mlts]a|[mts]on|du|au|1er|\de|quel%(le)?)$'
+        if prev_word =~# '\v\c^%(un|l|[ld]e|ce%(tte)?|une|[mlts]a|[mts]on|du|au|1er|\de|quel%(le)?)$'
         "                           │
         "                           └─ `l` is the previous word, if we type `l'argument`
             return s:noun[a:abbr].sg
