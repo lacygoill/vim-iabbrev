@@ -242,13 +242,13 @@ fu! s:expand_adj(abbr,expansion) abort
     if &l:spl ==# 'en'
         return s:adj[a:abbr].english
     else
-        if prev_word =~# '\v\c^%(un|le|[mts]on|ce|était|est|sera)$'
+        if prev_word =~# '\v\c^%(un|le|[mts]on|ce|au|était|est|sera)$'
             return s:adj[a:abbr].le
 
         elseif prev_word =~# '\v\c^%(une|[lmts]a|cette)$'
             return s:adj[a:abbr].la
 
-        elseif prev_word =~# '\v\c^%([ldmtsc]es|[nv]os|leurs|étaient|sont|seront)$'
+        elseif prev_word =~# '\v\c^%([ldmtsc]es|aux|[nv]os|leurs|étaient|sont|seront)$'
             return s:adj[a:abbr].les
 
         else
