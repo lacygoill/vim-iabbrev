@@ -330,13 +330,23 @@ fu! s:expand_noun(abbr,expansion) abort
         "                           └─ `l` is the previous word, if we type `l'argument`
             return s:noun[a:abbr].sg
 
-        elseif prev_word =~# '\v\c^%([ldmts]es|[nv]os|leurs|plusieurs|certains|aux|\d+|quel%(le)?s)$'
+        elseif prev_word =~# '\v\c^%(aux|\d+)$'
             return s:noun[a:abbr].pl
 
         " if the previous word ends with an a `s`, expands the abbreviation into
         " its plural form:
         "         ce sont les derniers remplacements
         "                            ^             ^
+        " should take care of several previous words which could appear before
+        " a plural form:
+        "
+        "               • [ldmts]es
+        "               • [nv]os
+        "               • leurs
+        "               • plusieurs
+        "               • certains
+        "               • quel%(le)?s
+
         elseif prev_word =~# 's$'
             return s:noun[a:abbr].pl
 
