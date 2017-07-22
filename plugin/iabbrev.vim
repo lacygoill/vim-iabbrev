@@ -325,12 +325,12 @@ fu! s:expand_noun(abbr,expansion) abort
     else
         "                                                                        ┌─ digit
         "                                                                        │
-        if prev_word =~# '\v\c^%(un|l|le|ce%(tte)?|une|[mlts]a|[mts]on|du|au|1er|\de)$'
+        if prev_word =~# '\v\c^%(un|l|le|ce%(tte)?|une|[mlts]a|[mts]on|du|au|1er|\de|quel%(le)?)$'
         "                           │
         "                           └─ `l` is the previous word, if we type `l'argument`
             return s:noun[a:abbr].sg
 
-        elseif prev_word =~# '\v\c^%([ldmts]es|[nv]os|leurs|plusieurs|certains|aux|\d+)$'
+        elseif prev_word =~# '\v\c^%([ldmts]es|[nv]os|leurs|plusieurs|certains|aux|\d+|quel%(le)?s)$'
             return s:noun[a:abbr].pl
 
         " if the previous word ends with an a `s`, expands the abbreviation into
