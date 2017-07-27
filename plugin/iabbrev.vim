@@ -382,7 +382,11 @@ fu! s:expand_verb(abbr,expansion) abort
         elseif prev_word =~# '\v\c^%(il|elle|ça|ne|qui)$'
             return s:verb[a:abbr]['fr_il']
 
-        elseif prev_word =~# '\v\c^%(ils|elles)$'
+        " previously, we used this:
+        "         elseif prev_word =~# '\v\c^%(ils|elles)$'
+        " but it missed sth like:
+        "         ces arguments prm
+        elseif prev_word =~# '\Cs$'
             return s:verb[a:abbr]['fr_ils']
 
         elseif prev_word =~# '\v\c^%(a|ont|fut)$'
