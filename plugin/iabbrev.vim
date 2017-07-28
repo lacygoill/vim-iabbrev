@@ -707,6 +707,7 @@ inorea  izn   isn't
 inorea  mm    même
 inorea  nimp  n'importe quel
 inorea  ocd   autocmd
+inorea  ot    to
 inorea  pee   peut-être
 inorea  pls   plusieurs
 inorea  pmp   peu importe
