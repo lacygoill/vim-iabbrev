@@ -671,6 +671,7 @@ Pab noun sbs substitution -- "
 Pab noun stt -- statement
 Pab noun tah tâche -- task
 Pab noun vlr valeur -- value
+Pab noun vnm évènement -- event
 Pab noun vrb variable -- "
 Pab noun xpr expression -- "
 
@@ -683,11 +684,6 @@ Pab verb prm permettre permet permettent permis permettant
 Pab verb rpl remplacer remplace remplacent remplacé remplaçant -- replace
 Pab verb rtr retourner retourne retournent retourné retournant -- return
 Pab verb lls illustrer illustre illustrent illustré illustrant
-
-
-" We can't write `:Abolish` inside vimrc, because when it's initially sourced,
-" the plugin hasn't been sourced yet. So, we use it in this plugin instead.
-Abolish teh   the
 
 
 inorea  ac    avec
