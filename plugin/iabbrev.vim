@@ -1,6 +1,6 @@
 " Don't move the `Manual` section after the `Automatic`, because `s:pab()`
 " relies on `:Aab`.
-" Manual "{{{
+" Manual {{{1
 
 " ✔ ✘
 digraphs ok 10004 no 10008
@@ -207,8 +207,7 @@ call s:install_bracket_expansion_abbrev('()')
 call s:install_bracket_expansion_abbrev('[]')
 call s:install_bracket_expansion_abbrev('{}')
 
-"}}}
-" Automatic "{{{
+" Automatic {{{1
 
 " This command should simply move the cursor on a duplicate abbreviation.
 " FIXME:
@@ -216,7 +215,7 @@ call s:install_bracket_expansion_abbrev('{}')
 " this file
 com! -buffer Duplicates call s:duplicates()
 
-fu! s:duplicates() abort
+fu! s:duplicates() abort "{{{2
     let branch1 = 'Abolish\s+(\S+)\s+\_.*\_^Abolish\s+\zs\1\ze\s+'
     let branch2 = 'inorea%[bbrev]\s+(\S+)\s+\_.*\_^inorea%[bbrev]\s+\zs\2\ze\s+'
     let branch3 = 'Pab\s+%(adj|adv|noun|verb)\s+(\S+)\s+\_.*\_^Pab\s+%(adj|adv|noun|verb)\s+\zs\3\ze\s+'
@@ -228,15 +227,13 @@ fu! s:duplicates() abort
     endif
 endfu
 
-
 let [ s:adj, s:adv, s:noun, s:verb ] = [ {}, {}, {}, {} ]
-" s:expand_adj() "{{{
-
-"                     ┌─ the function doesn't need it: it's just for our
-"                     │  completion plugin, to get a description of what an
-"                     │  abbreviation will be expanded into
+fu! s:expand_adj(abbr,expansion) abort "{{{2
 "                     │
-fu! s:expand_adj(abbr,expansion) abort
+"                     └─ the function doesn't need it: it's just for our
+"                        completion plugin, to get a description of what an
+"                        abbreviation will be expanded into
+
     let prev_word = s:get_prev_word()
 
     if &l:spl ==# 'en'
@@ -257,10 +254,7 @@ fu! s:expand_adj(abbr,expansion) abort
     endif
 endfu
 
-"}}}
-" s:expand_adv() "{{{
-
-fu! s:expand_adv(abbr,expansion) abort
+fu! s:expand_adv(abbr,expansion) abort "{{{2
     let prev_word = s:get_prev_word()
     let to_capitalize = s:should_we_capitalize()
 
@@ -299,10 +293,7 @@ fu! s:expand_adv(abbr,expansion) abort
     endif
 endfu
 
-"}}}
-" s:expand_noun() "{{{
-
-fu! s:expand_noun(abbr,expansion) abort
+fu! s:expand_noun(abbr,expansion) abort "{{{2
     let prev_word = s:get_prev_word()
 
     if &l:spl ==# 'en'
@@ -356,10 +347,7 @@ fu! s:expand_noun(abbr,expansion) abort
     endif
 endfu
 
-"}}}
-" s:expand_verb() "{{{
-
-fu! s:expand_verb(abbr,expansion) abort
+fu! s:expand_verb(abbr,expansion) abort "{{{2
     let prev_word = s:get_prev_word()
 
     if &l:spl ==# 'en'
@@ -398,9 +386,7 @@ fu! s:expand_verb(abbr,expansion) abort
     endif
 endfu
 
-"}}}
-" s:expand_expansion() "{{{
-
+fu! s:get_expansion(abbr,type) abort "{{{2
 " This function may be called like this:
 "     s:get_expansion('tpr','adj')
 "
@@ -408,23 +394,19 @@ endfu
 " the first value which isn't 'tpr'.
 " We need this value to get a meaningful description of all our abbreviations
 " inside the popup completion menu.
-fu! s:get_expansion(abbr,type) abort
     return items(filter(deepcopy(s:{a:type}[a:abbr]), 'v:val !=# '.string(a:abbr)))[0][1]
 endfu
 
-"}}}
-" s:get_prev_word() "{{{
-
+fu! s:get_prev_word() abort "{{{2
 " get the word before the cursor
 " necessary to know which form of the expansion should be used (plural, tense, …)
-fu! s:get_prev_word() abort
+
     " we split whenever there's a space or a single quote (to get `une` out of `d'une`)
     let prev_words = split(matchstr(getline('.'), '\v.*%'.col('.').'c'), "'\\| ")
     return empty(prev_words) ? '' : prev_words[-1]
 endfu
 
-"}}}
-" s:is_short_adj() "{{{
+" is_short_adj {{{2
 
 " this function receives an abbreviation and a key, and returns 1 if the
 " expansion of the abbreviation associated with the key contains a double
@@ -448,10 +430,7 @@ fu! s:is_short_adj(abbr, key) abort
                 \ ( a:key ==# 'les' || a:key ==# 'la' )
 endfu
 
-"}}}
-" s:pab() "{{{
-
-fu! s:pab(nature, abbr, ...) abort
+fu! s:pab(nature, abbr, ...) abort "{{{2
     " check we've given a valid type to `:Pab`
     " also check that we gave at least one argument (the expanded word) besides
     " the abbreviation
@@ -559,10 +538,7 @@ fu! s:pab(nature, abbr, ...) abort
     endif
 endfu
 
-"}}}
-" s:separate_args_enfr "{{{
-
-fu! s:separate_args_enfr(args) abort
+fu! s:separate_args_enfr(args) abort "{{{2
     let [ fr_args, en_args ] = [ [], [] ]
 
     " check if there's a double dash inside the arguments passed to `:Pab`
@@ -595,11 +571,8 @@ fu! s:separate_args_enfr(args) abort
     return [ fr_args, en_args ]
 endfu
 
-"}}}
-" s:should_we_capitalize() "{{{
-
+fu! s:should_we_capitalize() abort "{{{2
 " Should `pdo` be expanded into `by default` or into `By default,`?
-fu! s:should_we_capitalize() abort
     let cms              = !empty(&l:cms) ? '\V\%('.escape(split(&l:cms, '%s')[0], '\').'\)\?\v' : ''
     let after_dot        = match(getline('.'), '\v%(\.|\?|!)\s+%'.col('.').'c') != -1
     let after_nothing    = match(getline('.'), '\v^\s*'.cms.'\s*%'.col('.').'c') != -1
@@ -612,7 +585,7 @@ fu! s:should_we_capitalize() abort
     \                   )
 endfu
 
-"}}}
+" abbreviations {{{2
 
 "             ┌─ Poly abbreviation
 "             │
@@ -717,6 +690,3 @@ inorea  td    TODO
 inorea  th    the
 inorea  vai   via
 inorea  wsp   whitespace
-
-"}}}
-
