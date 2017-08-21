@@ -164,8 +164,8 @@ fu! s:expand_anywhere_abbr() abort
             " … we use the first/french expansion if there's only one word in
             " `expansions` or if we're in a french buffer
             let expansion  = len(expansions) == 1 || &spl ==# 'fr'
-                           \   ? expansions[0]
-                           \   : expansions[1]
+                          \?     expansions[0]
+                          \:     expansions[1]
 
             " … delete the abbreviation before the cursor and replace it with
             " the expansion
@@ -278,8 +278,8 @@ fu! s:expand_adv(abbr,expansion) abort "{{{2
         endif
 
         return to_capitalize
-                    \ ? toupper(s:adv[a:abbr].english[0]).s:adv[a:abbr].english[1:].','
-                    \ : s:adv[a:abbr].english
+            \?     toupper(s:adv[a:abbr].english[0]).s:adv[a:abbr].english[1:].','
+            \:     s:adv[a:abbr].english
     else
         " an english abbreviation (like `ctl`) shouldn't be expanded into an
         " french buffer
@@ -288,8 +288,8 @@ fu! s:expand_adv(abbr,expansion) abort "{{{2
         endif
 
         return to_capitalize
-                    \ ? toupper(s:adv[a:abbr].french[0]).s:adv[a:abbr].french[1:].','
-                    \ : s:adv[a:abbr].french
+            \?     toupper(s:adv[a:abbr].french[0]).s:adv[a:abbr].french[1:].','
+            \:     s:adv[a:abbr].french
     endif
 endfu
 
@@ -468,9 +468,9 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
         "     Pab adj crn courant    "s  courante  "es  --  current
         "     Pab adj drn dernier    "s  dernière  "s
         call map(s:adj[abbr], ' !s:is_short_adj(abbr, v:key)
-                              \   ? v:val
-                              \   : s:adj[abbr][ v:key ==# "les" ? "le" : "la" ]
-                              \    .s:adj[abbr][v:key][1:] ')
+                            \?      v:val
+                            \:  s:adj[abbr][ v:key ==# "les" ? "le" : "la" ].s:adj[abbr][v:key][1:]
+                            \ ')
 
         " Example of command executed by the next `exe`:
         "     inorea <silent> tpr <c-r>=<sid>expand_adj('tpr','temporaire')<cr>
@@ -512,13 +512,13 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
 
     elseif nature ==? 'verb'
         let s:verb[abbr] = {
-                           \ 'fr_inf':   get(fr_args, '0', abbr),
-                           \ 'fr_il':    get(fr_args, '1', abbr),
-                           \ 'fr_ils':   get(fr_args, '2', abbr),
-                           \ 'fr_passe': get(fr_args, '3', abbr),
-                           \ 'fr_ant':   get(fr_args, '4', abbr),
-                           \ 'en_inf':   get(en_args, '0', abbr),
-                           \ }
+                         \   'fr_inf':   get(fr_args, '0', abbr),
+                         \   'fr_il':    get(fr_args, '1', abbr),
+                         \   'fr_ils':   get(fr_args, '2', abbr),
+                         \   'fr_passe': get(fr_args, '3', abbr),
+                         \   'fr_ant':   get(fr_args, '4', abbr),
+                         \   'en_inf':   get(en_args, '0', abbr),
+                         \ }
 
         " With the command:
         "     Pab verb ctn contenir contient contiennent contenu contenant -- contain
@@ -527,9 +527,9 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
         if s:verb[abbr].en_inf !=# abbr
             call extend(s:verb[abbr],
                                     \ {
-                                    \ 'en_s':   s:verb[abbr].en_inf.'s',
-                                    \ 'en_ed':  s:verb[abbr].en_inf.'ed',
-                                    \ 'en_ing': matchstr(s:verb[abbr].en_inf, '.*\zee\?').'ing',
+                                    \   'en_s':   s:verb[abbr].en_inf.'s',
+                                    \   'en_ed':  s:verb[abbr].en_inf.'ed',
+                                    \   'en_ing': matchstr(s:verb[abbr].en_inf, '.*\zee\?').'ing',
                                     \ } )
         endif
 
