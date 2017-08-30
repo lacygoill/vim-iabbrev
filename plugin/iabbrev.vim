@@ -1,3 +1,8 @@
+if exists('g:loaded_iabbrev')
+    finish
+endif
+let g:loaded_iabbrev = 1
+
 " Don't move the `Manual` section after the `Automatic`, because `s:pab()`
 " relies on `:Aab`.
 " Manual {{{1
