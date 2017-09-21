@@ -244,7 +244,7 @@ fu! s:expand_adj(abbr,expansion) abort "{{{2
     if &l:spl ==# 'en'
         return s:adj[a:abbr].english
     else
-        if prev_word =~# '\v\c^%(un|le|[mts]on|ce|au|était|est|sera)$'
+        if prev_word =~# '\v\c^%(un|le|[mts]on|ce%(tte)@!|au|était|est|sera)$'
             return s:adj[a:abbr].le
 
         elseif prev_word =~# '\v\c^%(une|[lmts]a|cette)$'
