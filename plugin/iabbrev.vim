@@ -439,7 +439,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
     " check we've given a valid type to `:Pab`
     " also check that we gave at least one argument (the expanded word) besides
     " the abbreviation
-    if !count([ 'adj', 'adv', 'noun', 'verb' ], a:nature) || !exists('a:1')
+    if count([ 'adj', 'adv', 'noun', 'verb' ], a:nature) == -1 || !exists('a:1')
         return
     endif
 
