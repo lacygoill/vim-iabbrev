@@ -11,7 +11,7 @@ let g:autoloaded_iabbrev = 1
 digraphs ok 10004 no 10008
 
 " …
-digraphs .. 8230
+digraphs pp 8230
 
 " ┌ ┐ └ ┘
 digraphs tl 9484 tr 9488 bl 9492 br 9496
