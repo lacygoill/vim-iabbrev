@@ -16,13 +16,14 @@ augroup END
 " Functions {{{1
 fu! s:lazy_load_vim_iabbrev() abort "{{{2
     exe 'so '.fnameescape(s:autoload_script)
+
     au! lazy_load_vim_iabbrev
     aug! lazy_load_vim_iabbrev
+    sil! unmap r
 endfu
 
 fu! s:my_r() abort "{{{2
     call s:lazy_load_vim_iabbrev()
-    sil! unmap r
     return 'r'
 endfu
 " The goal of  this function is to  make sure our digraphs are  accessible if we
