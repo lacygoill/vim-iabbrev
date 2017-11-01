@@ -10,6 +10,9 @@ let g:autoloaded_iabbrev = 1
 " ✔ ✘
 digraphs ok 10004 no 10008
 
+" â ê î ô û
+digraphs aa 226 ee 234 ii 238 oo 244 uu 251
+
 " …
 digraphs pp 8230
 
@@ -25,7 +28,7 @@ digraphs tl 9484 tr 9488 bl 9492 br 9496
 digraphs fa 8704 te 8707
 
 " ∈ ∉
-digraphs ee 8712 e/ 8713
+digraphs e_ 8712 e/ 8713
 
 " ⊥
 digraphs co 8869
