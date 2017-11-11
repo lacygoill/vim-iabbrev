@@ -676,7 +676,6 @@ inorea  dsn   doesn't
 inorea  ee    être
 inorea  el    le
 inorea  fi    if
-inorea  fo    of
 inorea  fxm   FIXME
 inorea  ie    i.e.
 inorea  itr   intérieur
@@ -693,7 +692,6 @@ inorea  pr    pour
 inorea  prt   particulièrement
 inorea  pt    peut
 inorea  ptt   pattern
-inorea  st    sont
 inorea  svr   several
 inorea  td    TODO
 inorea  th    the
