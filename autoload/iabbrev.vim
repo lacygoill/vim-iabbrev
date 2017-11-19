@@ -7,6 +7,9 @@ let g:autoloaded_iabbrev = 1
 " relies on `:Aab`.
 " Manual {{{1
 
+" ∅
+digraphs o/ 8709
+
 " ✔ ✘
 digraphs ok 10004 no 10008
 
