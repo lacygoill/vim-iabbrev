@@ -221,12 +221,11 @@ call s:install_bracket_expansion_abbrev('{}')
 " Automatic {{{1
 
 " This command should simply move the cursor on a duplicate abbreviation.
-" FIXME:
-" define the cmd automatically ? because atm it doesn't work until we source
-" this file
-com! -buffer Duplicates call s:duplicates()
+com! FindDuplicateAbbreviation call s:find_duplicate_abbreviation()
+" Do NOT add the `-buffer` attribute to  the command. It would be applied to the
+" buffer that Vim opens during a session.
 
-fu! s:duplicates() abort "{{{2
+fu! s:find_duplicate_abbreviation() abort "{{{2
     let branch1 = 'Abolish\s+(\S+)\s+\_.*\_^Abolish\s+\zs\1\ze\s+'
     let branch2 = 'inorea%[bbrev]\s+(\S+)\s+\_.*\_^inorea%[bbrev]\s+\zs\2\ze\s+'
     let branch3 = 'Pab\s+%(adj|adv|noun|verb)\s+(\S+)\s+\_.*\_^Pab\s+%(adj|adv|noun|verb)\s+\zs\3\ze\s+'
