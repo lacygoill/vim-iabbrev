@@ -698,3 +698,7 @@ inorea  svr   several
 inorea  td    TODO
 inorea  vai   via
 inorea  wsp   whitespace
+
+" Teardown {{{1
+
+delcommand Aab
