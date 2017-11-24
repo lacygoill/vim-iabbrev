@@ -583,7 +583,7 @@ endfu
 
 fu! s:should_we_capitalize() abort "{{{2
 " Should `pdo` be expanded into `by default` or into `By default,`?
-    let cml              = !empty(&l:cms) ? '\V\%('.escape(split(&l:cms, '%s')[0], '\').'\)\?\v' : ''
+    let cml              = !empty(&l:cms) ? '\V\%('.escape(split(&l:cms, '%s', 1)[0], '\').'\)\?\v' : ''
     let after_dot        = match(getline('.'), '\v%(\.|\?|!)\s+%'.col('.').'c') != -1
     let after_nothing    = match(getline('.'), '\v^\s*'.cml.'\s*%'.col('.').'c') != -1
     let dot_on_prev_line = match(getline(line('.')-1), '\v%(\.|\?|!)\s*$') != -1
