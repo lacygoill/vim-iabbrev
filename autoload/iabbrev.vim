@@ -668,7 +668,7 @@ Pab verb rpl remplacer remplace remplacent remplacé remplaçant -- replace
 Pab verb rtr retourner retourne retournent retourné retournant -- return
 Pab verb lls illustrer illustre illustrent illustré illustrant
 
-delcommand Pab
+delc Pab
 
 inorea  ac    avec
 inorea  al    la
@@ -701,4 +701,4 @@ inorea  wsp   whitespace
 
 " Teardown {{{1
 
-delcommand Aab
+delc Aab
