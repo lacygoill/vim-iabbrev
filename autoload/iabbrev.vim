@@ -404,7 +404,7 @@ fu! s:get_expansion(abbr,type) abort "{{{2
 " the first value which isn't 'tpr'.
 " We need this value to get a meaningful description of all our abbreviations
 " inside the popup completion menu.
-    return items(filter(deepcopy(s:{a:type}[a:abbr]), 'v:val !=# '.string(a:abbr)))[0][1]
+    return items(filter(deepcopy(s:{a:type}[a:abbr]), { k,v -> v !=# a:abbr }))[0][1]
 endfu
 
 fu! s:get_prev_word() abort "{{{2
@@ -477,10 +477,11 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
         "
         "     Pab adj crn courant    "s  courante  "es  --  current
         "     Pab adj drn dernier    "s  dernière  "s
-        call map(s:adj[abbr], '  !s:is_short_adj(abbr, v:key)
-        \                      ?     v:val
-        \                      :     s:adj[abbr][ v:key ==# "les" ? "le" : "la" ].s:adj[abbr][v:key][1:]
-        \                     ')
+        call map(s:adj[abbr], { k,v ->   !s:is_short_adj(abbr, k)
+        \                              ?     v
+        \                              :     s:adj[abbr][ k ==# 'les' ? 'le' : 'la' ]
+        \                                   .s:adj[abbr][k][1:]
+        \                     })
 
         " Example of command executed by the next `exe`:
         "     inorea <silent> tpr <c-r>=<sid>expand_adj('tpr','temporaire')<cr>
