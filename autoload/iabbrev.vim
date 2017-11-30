@@ -166,7 +166,7 @@ fu! s:expand_anywhere_abbr() abort
         " we could hit `C-]` right after the abbreviation (no space between it
         " and the cursor), OR after a space
         let text_before_cursor = matchstr(getline('.'), repeat('.', strchars(key)).' \?\%'.col('.').'c')
-        let after_space = match(text_before_cursor, ' ') != -1
+        let after_space = stridx(text_before_cursor, ' ') != -1
 
         " if one of them matches the word before the cursor …
         if text_before_cursor ==# key || text_before_cursor ==# key.' '
@@ -436,8 +436,8 @@ endfu
 "                        │
 "                        └─ short version of dernier
 fu! s:is_short_adj(abbr, key) abort
-    return match(s:adj[a:abbr][a:key], '"') != -1 &&
-                \ ( a:key ==# 'les' || a:key ==# 'la' )
+    return stridx(s:adj[a:abbr][a:key], '"') != -1
+    \&&  ( a:key ==# 'les' || a:key ==# 'la' )
 endfu
 
 fu! s:pab(nature, abbr, ...) abort "{{{2
