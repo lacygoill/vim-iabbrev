@@ -609,7 +609,6 @@ com! -nargs=+ Pab call s:pab(<f-args>)
 Pab adj crn courant "s courante "es -- current
 Pab adj drn dernier "s dernière "s
 Pab adj ncs nécessaire "s nécessaire "s -- necessary
-Pab adj mm  même "s même "s
 Pab adj prc précédent -- previous
 Pab adj tpr temporaire -- temporary
 
@@ -685,6 +684,7 @@ inorea  fxm   FIXME
 inorea  ie    i.e.
 inorea  itr   intérieur
 inorea  izn   isn't
+inorea  mm    même
 inorea  nimp  n'importe quel
 inorea  ocd   autocmd
 inorea  ot    to
