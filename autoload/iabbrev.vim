@@ -16,6 +16,10 @@ digraphs ok 10004 no 10008
 " â ê î ô û
 digraphs aa 226 ee 234 ii 238 oo 244 uu 251
 
+" ù
+" Why `m`? It's close to the `ù` key.
+digraphs um 249
+
 " …
 digraphs pp 8230
 
