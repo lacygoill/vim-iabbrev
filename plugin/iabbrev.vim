@@ -30,7 +30,7 @@ endfu
 " enter replace mode without having entered insert mode during the session.
 
 " Mapping {{{1
-nno <expr> r <sid>my_r()
+nno  <expr>  r  <sid>my_r()
 
 " Variables {{{1
 

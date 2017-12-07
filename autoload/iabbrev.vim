@@ -193,7 +193,7 @@ fu! s:expand_anywhere_abbr() abort
     return "\<C-]>"
 endfu
 
-ino <expr> <C-]> <sid>expand_anywhere_abbr()
+ino  <expr><unique>  <C-]>  <sid>expand_anywhere_abbr()
 
 " BRACKET EXPANSION ON THE CHEAP
 "
