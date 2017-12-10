@@ -1,8 +1,3 @@
-if exists('g:autoloaded_iabbrev')
-    finish
-endif
-let g:autoloaded_iabbrev = 1
-
 " Don't move the `Manual` section after the `Automatic`, because `s:pab()`
 " relies on `:Aab`.
 " Manual {{{1
