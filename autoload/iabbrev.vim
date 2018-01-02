@@ -637,7 +637,6 @@ Pab noun fnt fenêtre -- window
 Pab noun hne chaîne -- string
 Pab noun icn icône -- icon
 Pab noun kbg key\ binding -- "
-Pab noun lg  ligne -- line
 Pab noun mvm mouvement
 Pab noun nvr environnement -- environment
 Pab noun opn option -- "
