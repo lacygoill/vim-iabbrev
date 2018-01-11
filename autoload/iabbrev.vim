@@ -49,6 +49,11 @@ digraph \|v 8595 \|^ 8593 \|> 8627
 " ≈
 digraphs =~ 8776
 
+" →
+" I often type `C-k f >` instead of `C-k - >`.
+" Handle this typo.
+digraphs f> 8594
+
 
 " `crg` is mapped to an operator defined in the unicode.vim plugin.
 " It searches for every pair of characters inside a text-object matching
