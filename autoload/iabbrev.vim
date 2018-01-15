@@ -680,7 +680,6 @@ Pab verb lls illustrer illustre illustrent illustré illustrant
 delc Pab
 
 inorea  ac    avec
-inorea  al    la
 inorea  cm    comme
 inorea  crr   correspondant à
 inorea  ds    dans
