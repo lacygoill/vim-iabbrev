@@ -627,6 +627,7 @@ Pab adv  ctl  actuellement
 Pab adv  gnr  généralement -- generally
 Pab adv  pbb  probablement -- probably
 Pab adv  pdo  par\ défaut
+Pab adv  pex  par\ exemple -- for\ example
 Pab adv  plq  plutôt\ que
 Pab adv  rtt  -- rather\ than
 Pab adv  tmt  automatiquement -- automatically
