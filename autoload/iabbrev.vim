@@ -416,7 +416,7 @@ fu! s:get_expansion(abbr,type) abort "{{{2
 " the first value which isn't 'tpr'.
 " We need this value to get a meaningful description of all our abbreviations
 " inside the popup completion menu.
-    return items(filter(deepcopy(s:{a:type}[a:abbr]), { k,v -> v !=# a:abbr }))[0][1]
+    return items(filter(deepcopy(s:{a:type}[a:abbr]), { k,v -> v isnot# a:abbr }))[0][1]
 endfu
 
 fu! s:get_prev_word() abort "{{{2
@@ -547,7 +547,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
         "     Pab verb ctn contenir contient contiennent contenu contenant -- contain
         "
         " … `contains contained containing` should be deduced from `contain`
-        if s:verb[abbr].en_inf !=# abbr
+        if s:verb[abbr].en_inf isnot# abbr
             call extend(s:verb[abbr],
                                     \ {
                                     \   'en_s':   s:verb[abbr].en_inf.'s',
