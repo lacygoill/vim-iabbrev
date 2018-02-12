@@ -181,12 +181,12 @@ fu! s:expand_anywhere_abbr() abort
         let after_space = stridx(text_before_cursor, ' ') != -1
 
         " if one of them matches the word before the cursor …
-        if text_before_cursor ==# key || text_before_cursor ==# key.' '
+        if text_before_cursor is# key || text_before_cursor is# key.' '
             let expansions = s:anywhere_abbr[key]
 
             " … we use the first/french expansion if there's only one word in
             " `expansions` or if we're in a french buffer
-            let expansion = len(expansions) == 1 || &spl ==# 'fr'
+            let expansion = len(expansions) == 1 || &l:spl is# 'fr'
             \?                  expansions[0]
             \:                  expansions[1]
 
@@ -258,7 +258,7 @@ fu! s:expand_adj(abbr,expansion) abort "{{{2
 
     let prev_word = s:get_prev_word()
 
-    if &l:spl ==# 'en'
+    if &l:spl is# 'en'
         return s:adj[a:abbr].english
     else
         if prev_word =~# '\v\c^%(un|le|[mts]on|ce%(tte)@!|au|était|est|sera)$'
@@ -280,7 +280,7 @@ fu! s:expand_adv(abbr,expansion) abort "{{{2
     let prev_word = s:get_prev_word()
     let to_capitalize = s:should_we_capitalize()
 
-    if &l:spl ==# 'en'
+    if &l:spl is# 'en'
 
         " A french abbreviation (like `ctl`) shouldn't be expanded into an
         " english buffer.
@@ -295,7 +295,7 @@ fu! s:expand_adv(abbr,expansion) abort "{{{2
         " don't transform the keys (from the dictionaries) we return.
         " But we have the same issue with english nouns, and more generally every
         " time we transform a key before returning it (adding an `s`, a comma, …).
-        if s:adv[a:abbr].english ==# a:abbr
+        if s:adv[a:abbr].english is# a:abbr
             return a:abbr
         endif
 
@@ -305,7 +305,7 @@ fu! s:expand_adv(abbr,expansion) abort "{{{2
     else
         " an english abbreviation (like `ctl`) shouldn't be expanded into an
         " french buffer
-        if s:adv[a:abbr].french ==# a:abbr
+        if s:adv[a:abbr].french is# a:abbr
             return a:abbr
         endif
 
@@ -318,7 +318,7 @@ endfu
 fu! s:expand_noun(abbr,expansion) abort "{{{2
     let prev_word = s:get_prev_word()
 
-    if &l:spl ==# 'en'
+    if &l:spl is# 'en'
         " A french abbreviation (like `dcl`) shouldn't be expanded into an
         " english buffer.
         " Without this check, in an english buffer, if we type `some dcl`,
@@ -331,7 +331,7 @@ fu! s:expand_noun(abbr,expansion) abort "{{{2
         " don't transform the keys (from the dictionaries) we return.
         " But we have the same issue with adverbs, and more generally every
         " time we transform a key before returning it (adding an `s`, a comma, …).
-        if s:noun[a:abbr].english ==# a:abbr
+        if s:noun[a:abbr].english is# a:abbr
             return a:abbr
         endif
         return s:noun[a:abbr].english.(prev_word =~# '\v\c^%(most|some|th[e|o]se|various|\d)$' ? 's' : '')
@@ -372,7 +372,7 @@ endfu
 fu! s:expand_verb(abbr,expansion) abort "{{{2
     let prev_word = s:get_prev_word()
 
-    if &l:spl ==# 'en'
+    if &l:spl is# 'en'
         if prev_word =~# '\v\c^%(s?he|it)$'
             return s:verb[a:abbr]['en_s']
 
@@ -449,7 +449,7 @@ endfu
 "                        └─ short version of dernier
 fu! s:is_short_adj(abbr, key) abort
     return stridx(s:adj[a:abbr][a:key], '"') != -1
-    \&&  ( a:key ==# 'les' || a:key ==# 'la' )
+    \&&  ( a:key is# 'les' || a:key is# 'la' )
 endfu
 
 fu! s:pab(nature, abbr, ...) abort "{{{2
@@ -475,7 +475,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
     "                      Try `bdo C-v SPC C-]`. Instead of getting `by default`,
     "                      we would get `default`.
 
-    if nature ==? 'adj'
+    if nature is# 'adj'
 
         let s:adj[abbr] = {
                           \ 'le':      get(fr_args, '0', abbr),
@@ -491,7 +491,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
         "     Pab adj drn dernier    "s  dernière  "s
         call map(s:adj[abbr], { k,v ->   !s:is_short_adj(abbr, k)
         \                              ?     v
-        \                              :     s:adj[abbr][ k ==# 'les' ? 'le' : 'la' ]
+        \                              :     s:adj[abbr][ k is# 'les' ? 'le' : 'la' ]
         \                                   .s:adj[abbr][k][1:]
         \                     })
 
@@ -507,7 +507,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
         exe 'inorea <silent> '.abbr
          \ .' <c-r>=<sid>expand_adj('.string(abbr).','.string(s:get_expansion(abbr,'adj')).')<cr>'
 
-    elseif nature ==? 'adv'
+    elseif nature is# 'adv'
         let s:adv[abbr] = {
                           \ 'french':  get(fr_args, '0', abbr),
                           \ 'english': get(en_args, '0', abbr),
@@ -516,7 +516,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
         exe 'inorea <silent> '.abbr
          \ .' <c-r>=<sid>expand_adv('.string(abbr).','.string(s:get_expansion(abbr,'adv')).')<cr>'
 
-    elseif nature ==? 'noun'
+    elseif nature is# 'noun'
 
         " if we didn't provide a plural form for a noun, use the same as the
         " singular with the additional suffix `s`
@@ -533,7 +533,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
         exe 'inorea <silent> '.abbr
          \ .' <c-r>=<sid>expand_noun('.string(abbr).','.string(s:get_expansion(abbr,'noun')).')<cr>'
 
-    elseif nature ==? 'verb'
+    elseif nature is# 'verb'
         let s:verb[abbr] = {
                          \   'fr_inf':   get(fr_args, '0', abbr),
                          \   'fr_il':    get(fr_args, '1', abbr),
@@ -582,7 +582,7 @@ fu! s:separate_args_enfr(args) abort "{{{2
         " if the argument after the double dash is a double quote, the english
         " abbreviation should be the same as the french one
         "     :Pab noun agt argument -- "
-        if get(en_args, 0, '') ==# '"'
+        if get(en_args, 0, '') is# '"'
             let en_args[0] = fr_args[0]
         endif
 
