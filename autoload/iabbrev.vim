@@ -186,7 +186,7 @@ fu! s:expand_anywhere_abbr() abort
 
             " … we use the first/french expansion if there's only one word in
             " `expansions` or if we're in a french buffer
-            let expansion = len(expansions) == 1 || &l:spl is# 'fr'
+            let expansion = len(expansions) ==# 1 || &l:spl is# 'fr'
             \?                  expansions[0]
             \:                  expansions[1]
 
@@ -456,7 +456,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
     " check we've given a valid type to `:Pab`
     " also check that we gave at least one argument (the expanded word) besides
     " the abbreviation
-    if count([ 'adj', 'adv', 'noun', 'verb' ], a:nature) == -1 || !exists('a:1')
+    if count([ 'adj', 'adv', 'noun', 'verb' ], a:nature) ==# -1 || !exists('a:1')
         return
     endif
 
@@ -520,7 +520,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
 
         " if we didn't provide a plural form for a noun, use the same as the
         " singular with the additional suffix `s`
-        if len(fr_args) == 1
+        if len(fr_args) ==# 1
             let fr_args += [ fr_args[0].'s' ]
         endif
 
@@ -570,7 +570,7 @@ fu! s:separate_args_enfr(args) abort "{{{2
     let dash = index(a:args, '--')
     " the double dash is at the start of the command:
     "     :Pab abr -- abbreviation
-    if dash == 0
+    if dash ==# 0
         let en_args = a:args[1:]
 
     " there's a double dash somewhere in the middle
@@ -604,7 +604,7 @@ fu! s:should_we_capitalize() abort "{{{2
 
     return after_dot || (
     \                     after_nothing &&
-    \                                   ( empty_prev_line || ( dot_on_prev_line || line('.') == 1 ) )
+    \                                   ( empty_prev_line || ( dot_on_prev_line || line('.') ==# 1 ) )
     \                   )
 endfu
 
