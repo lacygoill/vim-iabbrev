@@ -15,7 +15,7 @@ augroup END
 
 " Functions {{{1
 fu! s:lazy_load_vim_iabbrev() abort "{{{2
-    exe 'so '.fnameescape(s:autoload_script)
+    exe 'so '.fnameescape(s:AUTOLOAD_SCRIPT)
 
     au! lazy_load_vim_iabbrev
     aug! lazy_load_vim_iabbrev
@@ -34,4 +34,4 @@ nno  <expr>  r  <sid>my_r()
 
 " Variables {{{1
 
-let s:autoload_script = expand('<sfile>:p:h:h').'/autoload/'.expand('<sfile>:t')
+let s:AUTOLOAD_SCRIPT = expand('<sfile>:p:h:h').'/autoload/'.expand('<sfile>:t')
