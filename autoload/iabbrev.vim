@@ -695,6 +695,7 @@ inorea  fxm   FIXME
 inorea  ie    i.e.
 inorea  itr   intérieur
 inorea  izn   isn't
+inorea  lx    LaTeX
 inorea  mm    même
 inorea  nimp  n'importe quel
 inorea  ocd   autocmd
