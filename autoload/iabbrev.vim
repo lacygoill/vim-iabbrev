@@ -187,8 +187,8 @@ fu! s:expand_anywhere_abbr() abort
             " … we use the first/french expansion if there's only one word in
             " `expansions` or if we're in a french buffer
             let expansion = len(expansions) ==# 1 || &l:spl is# 'fr'
-            \?                  expansions[0]
-            \:                  expansions[1]
+                        \ ?     expansions[0]
+                        \ :     expansions[1]
 
             " … delete the abbreviation before the cursor and replace it with
             " the expansion
@@ -300,8 +300,8 @@ fu! s:expand_adv(abbr,expansion) abort "{{{2
         endif
 
         return to_capitalize
-        \?         toupper(s:adv[a:abbr].english[0]).s:adv[a:abbr].english[1:].','
-        \:         s:adv[a:abbr].english
+           \ ?     toupper(s:adv[a:abbr].english[0]).s:adv[a:abbr].english[1:].','
+           \ :     s:adv[a:abbr].english
     else
         " an english abbreviation (like `ctl`) shouldn't be expanded into an
         " french buffer
@@ -310,8 +310,8 @@ fu! s:expand_adv(abbr,expansion) abort "{{{2
         endif
 
         return to_capitalize
-        \?         toupper(s:adv[a:abbr].french[0]).s:adv[a:abbr].french[1:].','
-        \:         s:adv[a:abbr].french
+           \ ?     toupper(s:adv[a:abbr].french[0]).s:adv[a:abbr].french[1:].','
+           \ :     s:adv[a:abbr].french
     endif
 endfu
 
