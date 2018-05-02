@@ -449,7 +449,7 @@ endfu
 "                        └─ short version of dernier
 fu! s:is_short_adj(abbr, key) abort
     return stridx(s:adj[a:abbr][a:key], '"') !=# -1
-    \&&  ( a:key is# 'les' || a:key is# 'la' )
+    \ && ( a:key is# 'les' || a:key is# 'la' )
 endfu
 
 fu! s:pab(nature, abbr, ...) abort "{{{2
