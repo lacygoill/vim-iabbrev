@@ -700,12 +700,12 @@ Pab adv  el    le
 Pab adv  mm    même
 Pab adv  pee   peut-être
 Pab adv  pr    pour
-Pab adv  crr   correspondant à
+Pab adv  crr   correspondant\ à
 Pab adv  itr   intérieur
-Pab adv  nimp  n'importe quel
+Pab adv  nimp  n'importe\ quel
 Pab adv  prt   particulièrement
 Pab adv  pls   plusieurs
-Pab adv  pmp   peu importe
+Pab adv  pmp   peu\ importe
 
 delc Pab
 
