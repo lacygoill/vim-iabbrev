@@ -681,31 +681,42 @@ Pab verb rpl remplacer remplace remplacent remplacé remplaçant -- replace
 Pab verb rtr retourner retourne retournent retourné retournant -- return
 Pab verb lls illustrer illustre illustrent illustré illustrant
 
+" The following words are not all adverbs, but the “adverb” category seems to be
+" appropriate here.  It contains words wose form never changes (no conjugation).
+" Why do you use `:Pab` instead of `:inorea`?{{{
+"
+" `:inorea`  would make  the abbreviation  be  triggered no  matter the  current
+" language we're typing in.
+" Having a french  abbreviation being triggered while typing code  or writing in
+" english is annoying.
+" We want  french abbreviations to  be triggered  only when 'spelllang'  has the
+" value 'fr'.
+"}}}
+Pab adv  ac    avec
+Pab adv  cm    comme
+Pab adv  ds    dans
+Pab adv  ee    être
+Pab adv  el    le
+Pab adv  mm    même
+Pab adv  pee   peut-être
+Pab adv  pr    pour
+Pab adv  crr   correspondant à
+Pab adv  itr   intérieur
+Pab adv  nimp  n'importe quel
+Pab adv  prt   particulièrement
+Pab adv  pls   plusieurs
+Pab adv  pmp   peu importe
+
 delc Pab
 
-inorea  ac    avec
-inorea  cm    comme
-inorea  crr   correspondant à
-inorea  ds    dans
 inorea  dsn   doesn't
-inorea  ee    être
-inorea  el    le
 inorea  fi    if
 inorea  fxm   FIXME
 inorea  ie    i.e.
-inorea  itr   intérieur
 inorea  izn   isn't
 inorea  lx    LaTeX
-inorea  mm    même
-inorea  nimp  n'importe quel
 inorea  ocd   autocmd
 inorea  ot    to
-inorea  pee   peut-être
-inorea  pls   plusieurs
-inorea  pmp   peu importe
-inorea  pr    pour
-inorea  prt   particulièrement
-inorea  pt    peut
 inorea  ptt   pattern
 inorea  svr   several
 inorea  td    TODO
