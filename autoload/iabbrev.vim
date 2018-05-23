@@ -630,7 +630,6 @@ Pab adv  ctl  actuellement
 Pab adv  gnr  généralement -- generally
 Pab adv  pbb  probablement -- probably
 Pab adv  pdo  par\ défaut
-Pab adv  pex  par\ exemple -- for\ example
 Pab adv  plq  plutôt\ que
 Pab adv  rtt  -- rather\ than
 Pab adv  tmt  automatiquement -- automatically
@@ -694,18 +693,21 @@ Pab verb lls illustrer illustre illustrent illustré illustrant
 "}}}
 Pab adv  ac    avec
 Pab adv  cm    comme
+Pab adv  crr   correspondant\ à
 Pab adv  ds    dans
 Pab adv  ee    être
+" Alternative:
+" inorea  <silent>  eg  <c-r>=<sid>should_we_capitalize() ? 'E.g.,' : 'e.g.'<cr>
+Pab adv  eg    -- e.g.
 Pab adv  el    le
-Pab adv  mm    même
-Pab adv  pee   peut-être
-Pab adv  pr    pour
-Pab adv  crr   correspondant\ à
 Pab adv  itr   intérieur
+Pab adv  mm    même
 Pab adv  nimp  n'importe\ quel
-Pab adv  prt   particulièrement
+Pab adv  pee   peut-être
 Pab adv  pls   plusieurs
 Pab adv  pmp   peu\ importe
+Pab adv  pr    pour
+Pab adv  prt   particulièrement
 
 delc Pab
 
