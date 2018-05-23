@@ -711,7 +711,7 @@ Pab adv  prt   particulièrement
 
 delc Pab
 
-inorea  aar   As a result,
+inorea  ar    As a result,
 inorea  dsn   doesn't
 inorea  fi    if
 inorea  fxm   FIXME
