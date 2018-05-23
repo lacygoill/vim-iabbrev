@@ -692,12 +692,13 @@ Pab verb lls illustrer illustre illustrent illustré illustrant
 " value 'fr'.
 "}}}
 Pab adv  ac    avec
+" Alternative:
+" inorea  <silent>  ar  <c-r>=<sid>should_we_capitalize() ? 'As a result,' : 'as a result'<cr>
+Pab adv  ar    -- as\ a\ result
 Pab adv  cm    comme
 Pab adv  crr   correspondant\ à
 Pab adv  ds    dans
 Pab adv  ee    être
-" Alternative:
-" inorea  <silent>  eg  <c-r>=<sid>should_we_capitalize() ? 'E.g.,' : 'e.g.'<cr>
 Pab adv  eg    -- e.g.
 Pab adv  el    le
 Pab adv  itr   intérieur
@@ -711,7 +712,6 @@ Pab adv  prt   particulièrement
 
 delc Pab
 
-inorea  ar    As a result,
 inorea  dsn   doesn't
 inorea  fi    if
 inorea  fxm   FIXME
