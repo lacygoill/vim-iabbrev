@@ -710,8 +710,6 @@ Pab adv  pmp   peu\ importe
 Pab adv  pr    pour
 Pab adv  prt   particulièrement
 
-delc Pab
-
 inorea  dsn   doesn't
 inorea  fi    if
 inorea  fx    FIXME
@@ -729,3 +727,5 @@ inorea  wsp   whitespace
 " Teardown {{{1
 
 delc Aab
+delc Pab
+
