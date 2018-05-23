@@ -714,7 +714,7 @@ delc Pab
 
 inorea  dsn   doesn't
 inorea  fi    if
-inorea  fxm   FIXME
+inorea  fx    FIXME
 inorea  ie    i.e.
 inorea  izn   isn't
 inorea  lx    LaTeX
