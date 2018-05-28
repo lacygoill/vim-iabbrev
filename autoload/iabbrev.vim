@@ -701,6 +701,7 @@ Pab adv  ds    dans
 Pab adv  ee    être
 Pab adv  eg    -- e.g.
 Pab adv  el    le
+Pab adv  fx    par\ exemple -- for\ example
 Pab adv  itr   intérieur
 Pab adv  mm    même
 Pab adv  nimp  n'importe\ quel
@@ -712,7 +713,7 @@ Pab adv  prt   particulièrement
 
 inorea  dsn   doesn't
 inorea  fi    if
-inorea  fx    FIXME
+inorea  fm    FIXME
 inorea  ie    i.e.
 inorea  izn   isn't
 inorea  lx    LaTeX
