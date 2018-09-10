@@ -712,7 +712,6 @@ Pab adv  pr    pour
 Pab adv  prt   particulièrement
 
 inorea  dsn   doesn't
-inorea  fi    if
 inorea  fm    FIXME
 inorea  ie    i.e.
 inorea  izn   isn't
