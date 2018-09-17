@@ -713,7 +713,7 @@ Pab adv  prt   particulièrement
 
 inorea  dsn   doesn't
 inorea  fm    FIXME
-inorea  fmi   For more info, see:
+inorea  fmi   For more info, see
 inorea  ie    i.e.
 inorea  izn   isn't
 inorea  lx    LaTeX
