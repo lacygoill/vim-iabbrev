@@ -148,7 +148,7 @@ let g:Unicode_ConvertDigraphSubset = [
 
 " initialize `s:anywhere_abbr`
 " it's a dictionary, whose keys are abbreviations (ex: 'rmp'), and whose
-" values are lists containing 1 or 2 words (ex: [ 'remplacement', 'replacement'])
+" values are lists containing 1 or 2 words (ex: ['remplacement', 'replacement'])
 let s:anywhere_abbr = {}
 
 com! -nargs=+ Aab call s:add_anywhere_abbr(<f-args>)
@@ -252,7 +252,7 @@ fu! s:find_duplicate_abbreviation() abort "{{{2
     endif
 endfu
 
-let [ s:adj, s:adv, s:noun, s:verb ] = [ {}, {}, {}, {} ]
+let [s:adj, s:adv, s:noun, s:verb] = [{}, {}, {}, {}]
 fu! s:expand_adj(abbr,expansion) abort "{{{2
 "                     │
 "                     └─ the function doesn't need it: it's just for our
@@ -496,7 +496,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
         "     Pab adj drn dernier    "s  dernière  "s
         call map(s:adj[abbr], { k,v ->   !s:is_short_adj(abbr, k)
         \                              ?     v
-        \                              :     s:adj[abbr][ k is# 'les' ? 'le' : 'la' ]
+        \                              :     s:adj[abbr][k is# 'les' ? 'le' : 'la']
         \                                   .s:adj[abbr][k][1:]
         \                     })
 
@@ -526,7 +526,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
         " if we didn't provide a plural form for a noun, use the same as the
         " singular with the additional suffix `s`
         if len(fr_args) ==# 1
-            let fr_args += [ fr_args[0].'s' ]
+            let fr_args += [fr_args[0].'s']
         endif
 
         let s:noun[abbr] = {
