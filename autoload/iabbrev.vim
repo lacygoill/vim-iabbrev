@@ -127,7 +127,7 @@ let g:Unicode_ConvertDigraphSubset = [
 "       which must be in 'isk'
 "
 " Problem: What if we want to expand an abbreviation whose {lhs} is somewhere else?
-" Prefix, right in the middle of a word, anywhere…
+" Prefix, right in the middle of a word, anywhere ...
 " And what if the {lhs} we want doesn't follow the 2nd rule?
 " For example, what if we want a {lhs} whose last character is not in isk.
 "
@@ -163,7 +163,6 @@ fu! s:add_anywhere_abbr(lhs, ...)
     let rhs = substitute(rhs, '<Esc>', "\<Esc>", 'g')
     let rhs = split(rhs, '\s*--\s*')
 
-    " let s:anywhere_abbr[a:lhs] = [ rhs ] + ( exists('a:1') ? [ a:1 ] : [] )
     let s:anywhere_abbr[a:lhs] = rhs
 endfu
 
@@ -184,17 +183,17 @@ fu! s:expand_anywhere_abbr() abort
         let text_before_cursor = matchstr(getline('.'), repeat('.', strchars(key)).' \?\%'.col('.').'c')
         let after_space = stridx(text_before_cursor, ' ') !=# -1
 
-        " if one of them matches the word before the cursor …
+        " if one of them matches the word before the cursor ...
         if text_before_cursor is# key || text_before_cursor is# key.' '
             let expansions = s:anywhere_abbr[key]
 
-            " … we use the first/french expansion if there's only one word in
+            " ... we use the first/french expansion  if there's only one word in
             " `expansions` or if we're in a french buffer
             let expansion = len(expansions) ==# 1 || &l:spl is# 'fr'
                         \ ?     expansions[0]
                         \ :     expansions[1]
 
-            " … delete the abbreviation before the cursor and replace it with
+            " ... delete the abbreviation before  the cursor and replace it with
             " the expansion
             return repeat("\<BS>", strchars(key) + (after_space ? 1 : 0)).expansion.(after_space ? ' ' : '')
             "                                       │                                │
@@ -298,7 +297,7 @@ fu! s:expand_adv(abbr,expansion) abort "{{{2
         " We don't have this problem with verbs and adjectives, because we
         " don't transform the keys (from the dictionaries) we return.
         " But we have the same issue with english nouns, and more generally every
-        " time we transform a key before returning it (adding an `s`, a comma, …).
+        " time we transform a key before returning it (adding an `s`, a comma, ...).
         if s:adv[a:abbr].english is# a:abbr
             return a:abbr
         endif
@@ -334,7 +333,7 @@ fu! s:expand_noun(abbr,expansion) abort "{{{2
         " We don't have this problem with verbs and adjectives, because we
         " don't transform the keys (from the dictionaries) we return.
         " But we have the same issue with adverbs, and more generally every
-        " time we transform a key before returning it (adding an `s`, a comma, …).
+        " time we transform a key before returning it (adding an `s`, a comma, ...).
         if s:noun[a:abbr].english is# a:abbr
             return a:abbr
         endif
@@ -425,7 +424,7 @@ endfu
 
 fu! s:get_prev_word() abort "{{{2
 " get the word before the cursor
-" necessary to know which form of the expansion should be used (plural, tense, …)
+" necessary to know which form of the expansion should be used (plural, tense, ...)
 
     " we split whenever there's a space or a single quote (to get `une` out of `d'une`)
     let prev_words = split(matchstr(getline('.'), '\v.*%'.col('.').'c'), "'\\| ")
@@ -460,24 +459,26 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
     " check we've given a valid type to `:Pab`
     " also check that we gave at least one argument (the expanded word) besides
     " the abbreviation
-    if count([ 'adj', 'adv', 'noun', 'verb' ], a:nature) ==# -1 || !exists('a:1')
+    if index(['adj', 'adv', 'noun', 'verb'], a:nature) ==# -1 || !exists('a:1')
         return
     endif
 
-    let [ nature, abbr ]     = [ a:nature, a:abbr ]
-    let [ fr_args, en_args ] = s:separate_args_enfr(a:000)
+    let [nature, abbr]     = [a:nature, a:abbr]
+    let [fr_args, en_args] = s:separate_args_enfr(a:000)
 
     " add support for manual expansion when one should have occurred but didn't; ex:
     "         la semaine drn    →    la semaine dernière
-    exe 'Aab '.a:abbr.' '.(escape(a:1, ' ')).(empty(en_args) ? '' : ' '.en_args[0])
-    "                      │
-    "                      └─ The first expansion could contain a space.
-    "                      If it does, we need to escape it.
-    "                      Otherwise, when we manually expand the
-    "                      abbreviation, we would only get the last word.
-    "                      Ex:
-    "                      Try `bdo C-v SPC C-]`. Instead of getting `by default`,
-    "                      we would get `default`.
+    exe 'Aab '.a:abbr.' '.(escape(a:1, ' ')).(empty(en_args) ? '' : ' -- '.escape(en_args[0], ' '))
+    "                      │{{{
+    "                      └ The expansion could contain a space.
+    "
+    " If it does, we need to escape it.
+    " Otherwise, when we manually expand the abbreviation, we would only get the
+    " last word.
+    " MWE:
+    " Try `bdf C-v SPC C-]`.
+    " Instead of getting `by default`, we would get `default`.
+    "}}}
 
     if nature is# 'adj'
 
@@ -550,7 +551,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
         " With the command:
         "     Pab verb ctn contenir contient contiennent contenu contenant -- contain
         "
-        " … `contains contained containing` should be deduced from `contain`
+        " ... `contains contained containing` should be deduced from `contain`
         if s:verb[abbr].en_inf isnot# abbr
             call extend(s:verb[abbr],
                                     \ {
@@ -566,7 +567,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
 endfu
 
 fu! s:separate_args_enfr(args) abort "{{{2
-    let [ fr_args, en_args ] = [ [], [] ]
+    let [fr_args, en_args] = [[], []]
 
     " check if there's a double dash inside the arguments passed to `:Pab`
     " a double dash is used to end the french arguments; the next ones are
@@ -576,9 +577,11 @@ fu! s:separate_args_enfr(args) abort "{{{2
     "     :Pab abr -- abbreviation
     if dash ==# 0
         let en_args = a:args[1:]
+        "                    │
+        "                    └ ignore the `--` token
 
     " there's a double dash somewhere in the middle
-    "     :Pab abr french_abbr … -- english_abbr
+    "     :Pab abr french_abbr ... -- english_abbr
     elseif dash !=# -1
         let fr_args = a:args[0:dash-1]
         let en_args = a:args[dash+1:]
@@ -591,15 +594,15 @@ fu! s:separate_args_enfr(args) abort "{{{2
         endif
 
     " there's no double dash
-    "     :Pab abr french_abbr …
+    "     :Pab abr french_abbr ...
     else
         let fr_args = a:args
     endif
-    return [ fr_args, en_args ]
+    return [fr_args, en_args]
 endfu
 
 fu! s:should_we_capitalize() abort "{{{2
-" Should `pdo` be expanded into `by default` or into `By default,`?
+" Should `bdf` be expanded into `by default` or into `By default,`?
     let cml              = !empty(&l:cms) ? '\V\%('.escape(split(&l:cms, '%s', 1)[0], '\').'\)\?\v' : ''
     let after_dot        = match(getline('.'), '\v%(\.|\?|!)\s+%'.col('.').'c') !=# -1
     let after_nothing    = match(getline('.'), '\v^\s*'.cml.'\s*%'.col('.').'c') !=# -1
@@ -622,67 +625,23 @@ com! -nargs=+ Pab call s:pab(<f-args>)
 " add support for cycling, to get feminine plural and maybe for verb conjugations
 " use `C-]` (or `C-g j` and `C-g J`)
 
-Pab adj crn courant "s courante "es -- current
-Pab adj drn dernier "s dernière "s
-Pab adj ncs nécessaire "s nécessaire "s -- necessary
-Pab adj prc précédent -- previous
-Pab adj tpr temporaire -- temporary
+Pab adj  crn  courant "s courante "es -- current
+Pab adj  drn  dernier "s dernière "s
+Pab adj  ncs  nécessaire "s nécessaire "s -- necessary
+Pab adj  prc  précédent -- previous
+Pab adj  tpr  temporaire -- temporary
 
-Pab adv  bcp  beaucoup -- a\ lot\ of
-Pab adv  bdo  -- by\ default
-Pab adv  ctl  actuellement
-Pab adv  gnr  généralement -- generally
-Pab adv  pbb  probablement -- probably
-Pab adv  pdo  par\ défaut
-Pab adv  plq  plutôt\ que
-Pab adv  rtt  -- rather\ than
-Pab adv  tmt  automatiquement -- automatically
-Pab adv  tprr temporairement -- temporarily
-Pab adv  trm  autrement -- otherwise
-
-Pab noun bfr buffer -- "
-Pab noun ccr occurrence -- "
-Pab noun cct concaténation -- concatenation
-Pab noun cfg configuration -- "
-Pab noun cmm commande -- command
-Pab noun crc caractère -- character
-Pab noun dcl déclaration
-Pab noun drc dossier -- directory
-Pab noun fcn fonction -- function
-Pab noun fhr fichier -- file
-Pab noun fnt fenêtre -- window
-Pab noun hne chaîne -- string
-Pab noun icn icône -- icon
-Pab noun kbg key\ binding -- "
-Pab noun mvm mouvement
-Pab noun nvr environnement -- environment
-Pab noun opn option -- "
-Pab noun opu opérateur -- operator
-Pab noun pcs processus processus -- process
-Pab noun pgf paragraphe -- paragraph
-Pab noun prg programme -- program
-Pab noun pth parenthèse -- parentheses
-Pab noun rgm argument -- "
-Pab noun rgs registre -- register
-Pab noun rhh recherche -- search
-Pab noun rmp remplacement -- replacement
-Pab noun sbs substitution -- "
-Pab noun stt -- statement
-Pab noun tah tâche -- task
-Pab noun vlr valeur -- value
-Pab noun vnm évènement -- event
-Pab noun vrb variable -- "
-Pab noun xpr expression -- "
-
-Pab verb ctn contenir contient contiennent contenu contenant -- contain
-Pab verb dsp -- display
-Pab verb dwl télécharger -- download
-Pab verb ffh afficher affiche affichent affiché affichant
-Pab verb llw -- allow
-Pab verb prm permettre permet permettent permis permettant
-Pab verb rpl remplacer remplace remplacent remplacé remplaçant -- replace
-Pab verb rtr retourner retourne retournent retourné retournant -- return
-Pab verb lls illustrer illustre illustrent illustré illustrant
+Pab adv  bcp   beaucoup -- a\ lot\ of
+Pab adv  bdf   -- by\ default
+Pab adv  ctl   actuellement -- currently
+Pab adv  gnr   généralement -- generally
+Pab adv  pbb   probablement -- probably
+Pab adv  pdff  par\ défault
+Pab adv  plq   plutôt\ que
+Pab adv  rtt   -- rather\ than
+Pab adv  tmt   automatiquement -- automatically
+Pab adv  tprr  temporairement -- temporarily
+Pab adv  trm   autrement -- otherwise
 
 " The following words are not all adverbs, but the “adverb” category seems to be
 " appropriate here.  It contains words wose form never changes (no conjugation).
@@ -715,19 +674,63 @@ Pab adv  pmp   peu\ importe
 Pab adv  pr    pour
 Pab adv  prt   particulièrement
 
-inorea  dsn   doesn't
-inorea  fm    FIXME
-inorea  fmi   For more info, see
-inorea  ie    i.e.
-inorea  izn   isn't
-inorea  lx    LaTeX
-inorea  ocd   autocmd
-inorea  ot    to
-inorea  ptt   pattern
-inorea  svr   several
-inorea  td    TODO
-inorea  vai   via
-inorea  wsp   whitespace
+Pab noun  bfr  buffer -- "
+Pab noun  ccr  occurrence -- "
+Pab noun  cct  concaténation -- concatenation
+Pab noun  cfg  configuration -- "
+Pab noun  cmm  commande -- command
+Pab noun  crc  caractère -- character
+Pab noun  dcl  déclaration
+Pab noun  drc  dossier -- directory
+Pab noun  fcn  fonction -- function
+Pab noun  fhr  fichier -- file
+Pab noun  fnt  fenêtre -- window
+Pab noun  hne  chaîne -- string
+Pab noun  icn  icône -- icon
+Pab noun  kbg  key\ binding -- "
+Pab noun  mvm  mouvement
+Pab noun  nvr  environnement -- environment
+Pab noun  opn  option -- "
+Pab noun  opu  opérateur -- operator
+Pab noun  pcs  processus processus -- process
+Pab noun  pgf  paragraphe -- paragraph
+Pab noun  prg  programme -- program
+Pab noun  pth  parenthèse -- parentheses
+Pab noun  rgm  argument -- "
+Pab noun  rgs  registre -- register
+Pab noun  rhh  recherche -- search
+Pab noun  rmp  remplacement -- replacement
+Pab noun  sbs  substitution -- "
+Pab noun  stt  -- statement
+Pab noun  tah  tâche -- task
+Pab noun  vlr  valeur -- value
+Pab noun  vnm  évènement -- event
+Pab noun  vrb  variable -- "
+Pab noun  xpr  expression -- "
+
+Pab verb  ctn  contenir contient contiennent contenu contenant -- contain
+Pab verb  dsp  -- display
+Pab verb  dwl  télécharger -- download
+Pab verb  ffh  afficher affiche affichent affiché affichant
+Pab verb  llw  -- allow
+Pab verb  prm  permettre permet permettent permis permettant
+Pab verb  rpl  remplacer remplace remplacent remplacé remplaçant -- replace
+Pab verb  rtr  retourner retourne retournent retourné retournant -- return
+Pab verb  lls  illustrer illustre illustrent illustré illustrant
+
+inorea  dsn  doesn't
+inorea  fm   FIXME
+exe 'inorea  fmi   For more info, see:<cr>   '
+inorea  ie   i.e.
+inorea  izn  isn't
+inorea  lx   LaTeX
+inorea  ot   to
+inorea  ptt  pattern
+inorea  svr  several
+inorea  tcm  autocmd
+inorea  td   TODO
+inorea  vai  via
+inorea  wsp  whitespace
 
 " Teardown {{{1
 
