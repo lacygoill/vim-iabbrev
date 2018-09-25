@@ -153,14 +153,18 @@ let s:anywhere_abbr = {}
 
 com! -nargs=+ Aab call s:add_anywhere_abbr(<f-args>)
 
-fu! s:add_anywhere_abbr(lhs, rhs, ...)
+fu! s:add_anywhere_abbr(lhs, ...)
+    let rhs = join(a:000)
+
     " The default mapping or abbreviations commands (like :ino or
     " :inorea) automatically translate control characters.
     " Our custom command :Aab should do the same.
-    let rhs = substitute(a:rhs, '<CR>', "\<CR>", 'g')
+    let rhs = substitute(rhs, '<CR>', "\<CR>", 'g')
     let rhs = substitute(rhs, '<Esc>', "\<Esc>", 'g')
+    let rhs = split(rhs, '\s*--\s*')
 
-    let s:anywhere_abbr[a:lhs] = [ rhs ] + ( exists('a:1') ? [ a:1 ] : [] )
+    " let s:anywhere_abbr[a:lhs] = [ rhs ] + ( exists('a:1') ? [ a:1 ] : [] )
+    let s:anywhere_abbr[a:lhs] = rhs
 endfu
 
 fu! s:expand_anywhere_abbr() abort
