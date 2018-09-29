@@ -236,7 +236,7 @@ call s:install_bracket_expansion_abbrev('{}')
 " Automatic {{{1
 
 " This command should simply move the cursor on a duplicate abbreviation.
-com! FindDuplicateAbbreviation call s:find_duplicate_abbreviation()
+com! -bar FindDuplicateAbbreviation call s:find_duplicate_abbreviation()
 " Do NOT add the `-buffer` attribute to  the command. It would be applied to the
 " buffer that Vim opens during a session.
 
