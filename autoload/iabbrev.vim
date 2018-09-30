@@ -151,6 +151,16 @@ let g:Unicode_ConvertDigraphSubset = [
 " values are lists containing 1 or 2 words (ex: ['remplacement', 'replacement'])
 let s:anywhere_abbr = {}
 
+" Why `<f-args>` instead of `<q-args>`?{{{
+"
+" The splitting  done by `<f-args>`  allows us  to immediately separate  the lhs
+" from the rhs of the abbreviation inside the function.
+" Otherwise, we would have to do sth like:
+"
+"     let args = split(a:1)
+"     let lhs = args[0]
+"     let rhs = args[1:]
+"}}}
 com! -nargs=+ Aab call s:add_anywhere_abbr(<f-args>)
 
 fu! s:add_anywhere_abbr(lhs, ...)
