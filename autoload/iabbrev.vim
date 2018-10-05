@@ -667,7 +667,7 @@ Pab adv  trm   autrement -- otherwise
 Pab adv  ac    avec
 " Alternative:
 " inorea  <silent>  ar  <c-r>=<sid>should_we_capitalize() ? 'As a result,' : 'as a result'<cr>
-Pab adv  ar    -- as\ a\ result
+Pab adv  aar   -- as\ a\ result
 Pab adv  cm    comme
 Pab adv  crr   correspondant\ à
 Pab adv  ds    dans
