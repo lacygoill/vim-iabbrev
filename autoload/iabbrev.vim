@@ -620,9 +620,8 @@ fu! s:should_we_capitalize() abort "{{{2
     let empty_prev_line  = match(getline(line('.')-1), '^\s*$') !=# -1
 
     return after_dot || (
-    \                     after_nothing &&
-    \                                   ( empty_prev_line || ( dot_on_prev_line || line('.') ==# 1 ) )
-    \                   )
+        \      after_nothing &&
+        \          (empty_prev_line || (dot_on_prev_line || line('.') ==# 1)))
 endfu
 
 " abbreviations {{{2
