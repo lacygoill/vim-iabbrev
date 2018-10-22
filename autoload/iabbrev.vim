@@ -579,31 +579,31 @@ endfu
 fu! s:separate_args_enfr(args) abort "{{{2
     let [fr_args, en_args] = [[], []]
 
-    " check if there's a double dash inside the arguments passed to `:Pab`
-    " a double dash is used to end the french arguments; the next ones are
+    " check if there are two hyphens inside the arguments passed to `:Pab`
+    " two hyphens are used to end the french arguments; the next ones are
     " english
-    let dash = index(a:args, '--')
-    " the double dash is at the start of the command:
+    let hyphens = index(a:args, '--')
+    " two hyphens are at the start of the command:
     "     :Pab abr -- abbreviation
-    if dash ==# 0
+    if hyphens ==# 0
         let en_args = a:args[1:]
         "                    │
         "                    └ ignore the `--` token
 
-    " there's a double dash somewhere in the middle
+    " there are two hyphens somewhere in the middle
     "     :Pab abr french_abbr ... -- english_abbr
-    elseif dash !=# -1
-        let fr_args = a:args[0:dash-1]
-        let en_args = a:args[dash+1:]
+    elseif hyphens !=# -1
+        let fr_args = a:args[0:hyphens-1]
+        let en_args = a:args[hyphens+1:]
 
-        " if the argument after the double dash is a double quote, the english
+        " if the argument after the two hyphens is a double quote, the english
         " abbreviation should be the same as the french one
         "     :Pab noun agt argument -- "
         if get(en_args, 0, '') is# '"'
             let en_args[0] = fr_args[0]
         endif
 
-    " there's no double dash
+    " there are no two hyphens
     "     :Pab abr french_abbr ...
     else
         let fr_args = a:args
