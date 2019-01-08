@@ -301,7 +301,8 @@ fu! s:expand_adv(abbr,expansion) abort "{{{2
         " abbreviation at the beginning of a line, which follows a line ending
         " with a dot/bang/exclamation mark (ex: `autocmd!`), it's expanded like so:
         "
-        "         ctl  →  Ctl,
+        "         ctl
+        "         Ctl,~
         "
         " NOTE:
         " We don't have this problem with verbs and adjectives, because we
@@ -337,7 +338,8 @@ fu! s:expand_noun(abbr,expansion) abort "{{{2
         " Without this check, in an english buffer, if we type `some dcl`,
         " it's expanded like so:
         "
-        "         some dcl →  some dcls
+        "         some dcl
+        "         some dcls~
         "
         " NOTE:
         " We don't have this problem with verbs and adjectives, because we
@@ -447,13 +449,16 @@ endfu
 " expansion of the abbreviation associated with the key contains a double
 " quote
 " Ex:
-"                                                                    ┌─ doesn't contain a double quote
-"                                                                    │
-"     s:is_short_adj('drn', 'le')  →  0  because :Pab drn dernier "s dernière "s
 "
-"     s:is_short_adj('drn', 'la')  →  1  because :Pab drn dernier "s dernière "s
-"                                                                             │
-"                                                                             └─ contains a double quote
+"     s:is_short_adj('drn', 'le')
+"     0  because :Pab drn dernier "s dernière "s~
+"                                    │~
+"                                    └ doesn't contain a double quote~
+"
+"     s:is_short_adj('drn', 'la')
+"     1  because :Pab drn dernier "s dernière "s~
+"                                             │~
+"                                             └─ contains a double quote~
 
 " we use this function to check whether a given argument passed to `:Pab` is
 " a short version of an expansion, and should be transformed
@@ -477,7 +482,8 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
     let [fr_args, en_args] = s:separate_args_enfr(a:000)
 
     " add support for manual expansion when one should have occurred but didn't; ex:
-    "         la semaine drn    →    la semaine dernière
+    "         la semaine drn
+    "         la semaine dernière~
     exe 'Aab '.a:abbr.' '.(escape(a:1, ' ')).(empty(en_args) ? '' : ' -- '.escape(en_args[0], ' '))
     "                      │{{{
     "                      └ The expansion could contain a space.
