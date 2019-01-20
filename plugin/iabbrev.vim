@@ -5,10 +5,10 @@ let g:loaded_iabbrev = 1
 
 " Functions {{{1
 fu! s:lazy_load_vim_iabbrev() abort "{{{2
-    exe 'so '.fnameescape(s:AUTOLOAD_SCRIPT)
-
     au! lazy_load_vim_iabbrev
     aug! lazy_load_vim_iabbrev
+
+    exe 'so '.fnameescape(s:AUTOLOAD_SCRIPT)
     sil! unmap r
 endfu
 
