@@ -368,12 +368,12 @@ fu! s:expand_noun(abbr,expansion) abort "{{{2
         " should take care of several previous words which could appear before
         " a plural form:
         "
-        "               • [ldmts]es
-        "               • [nv]os
-        "               • leurs
-        "               • plusieurs
-        "               • certains
-        "               • quel%(le)?s
+        "               - [ldmts]es
+        "               - [nv]os
+        "               - leurs
+        "               - plusieurs
+        "               - certains
+        "               - quel%(le)?s
 
         elseif prev_word =~# 's$'
             return s:noun[a:abbr].pl
