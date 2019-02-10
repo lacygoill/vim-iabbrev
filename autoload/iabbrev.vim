@@ -739,6 +739,15 @@ exe 'inorea  fmi   For more info, see:<cr>   '
 inorea  ie   i.e.
 inorea  izn  isn't
 inorea  lx   LaTeX
+" en dash{{{
+"
+" https://english.stackexchange.com/a/2126/313834
+" https://en.wikipedia.org/wiki/Dash#En_dash
+" https://en.wikipedia.org/wiki/Dash#En_dash_versus_em_dash
+" https://en.wikipedia.org/wiki/Whitespace_character#Hair_spaces_around_dashes
+" https://tex.stackexchange.com/a/60038/169646
+"}}}
+inorea nd – –<left><left>
 inorea  ot   to
 inorea  ptt  pattern
 inorea  svr  several
@@ -746,7 +755,7 @@ inorea  tcm  autocmd
 inorea  td   TODO
 inorea  vai  via
 inorea  wsp  whitespace
-
+" }}}1
 " Teardown {{{1
 
 delc Aab
