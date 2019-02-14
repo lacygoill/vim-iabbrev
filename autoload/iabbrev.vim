@@ -479,7 +479,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
     endif
 
     let [nature, abbr]     = [a:nature, a:abbr]
-    let [fr_args, en_args] = s:separate_args_enfr(a:000)
+    let [fr_args, en_args] = deepcopy(s:separate_args_enfr(a:000))
 
     " add support for manual expansion when one should have occurred but didn't; ex:
     "         la semaine drn
