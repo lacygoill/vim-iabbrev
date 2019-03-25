@@ -693,6 +693,7 @@ Pab noun  bfr  buffer -- "
 Pab noun  ccr  occurrence -- "
 Pab noun  cct  concaténation -- concatenation
 Pab noun  cfg  configuration -- "
+Pab noun  cli  ligne\ de\ commande -- command-line
 Pab noun  cmm  commande -- command
 Pab noun  crc  caractère -- character
 Pab noun  dcl  déclaration
