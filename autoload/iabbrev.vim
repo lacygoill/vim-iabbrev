@@ -716,7 +716,7 @@ Pab noun  rgm  argument -- "
 Pab noun  rgs  registre -- register
 Pab noun  rhh  recherche -- search
 Pab noun  rmp  remplacement -- replacement
-Pab noun  sbs  substitution -- "
+Pab noun  ssn  substitution -- "
 Pab noun  stt  -- statement
 Pab noun  tah  tâche -- task
 Pab noun  vlr  valeur -- value
