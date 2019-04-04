@@ -5,9 +5,6 @@ let g:loaded_iabbrev = 1
 
 " Functions {{{1
 fu! s:lazy_load_vim_iabbrev() abort "{{{2
-    au! lazy_load_vim_iabbrev
-    aug! lazy_load_vim_iabbrev
-
     exe 'so '.fnameescape(s:AUTOLOAD_SCRIPT)
     sil! unmap r
 endfu
@@ -41,11 +38,8 @@ let s:AUTOLOAD_SCRIPT = expand('<sfile>:p:h:h').'/autoload/'.expand('<sfile>:t')
 "             > n
 "             ...
 "}}}
-augroup lazy_load_vim_iabbrev
-    au!
-    "              ┌─ digraphs should be accessible on the command-line
-    "              │  even if we haven't entered insert mode at least once
-    "              │
-    au InsertEnter,CmdLineEnter * call s:lazy_load_vim_iabbrev()
-augroup END
+"              ┌─ digraphs should be accessible on the command-line
+"              │  even if we haven't entered insert mode at least once
+"              │
+au InsertEnter,CmdLineEnter * ++once call s:lazy_load_vim_iabbrev()
 
