@@ -38,13 +38,13 @@ let s:AUTOLOAD_SCRIPT = expand('<sfile>:p:h:h').'/autoload/'.expand('<sfile>:t')
 "             > n
 "             ...
 "}}}
-unlet! s:one_shot
+unlet! s:did_shoot
 "              ┌ digraphs should be accessible on the command-line
 "              │ even if we haven't entered insert mode at least once
 "              │
 au InsertEnter,CmdlineEnter * ++once
-    \ if get(s:, 'one_shot', 1)
-    \ |     let s:one_shot = 0
+    \ if !get(s:, 'did_shoot', 0)
+    \ |     let s:did_shoot = 1
     \ |     call s:lazy_load_vim_iabbrev()
     \ | endif
 
