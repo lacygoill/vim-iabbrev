@@ -458,13 +458,13 @@ endfu
 "     s:is_short_adj('drn', 'la')
 "     1  because :Pab drn dernier "s dernière "s~
 "                                             │~
-"                                             └─ contains a double quote~
+"                                             └ contains a double quote~
 
 " we use this function to check whether a given argument passed to `:Pab` is
 " a short version of an expansion, and should be transformed
 " Ex:    Pab drn dernier "s
 "                        │
-"                        └─ short version of dernier
+"                        └ short version of dernier
 fu! s:is_short_adj(abbr, key) abort
     return stridx(s:adj[a:abbr][a:key], '"') !=# -1
     \ && ( a:key is# 'les' || a:key is# 'la' )
@@ -519,7 +519,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
         " Example of command executed by the next `exe`:
         "     inorea <silent> tpr <c-r>=<sid>expand_adj('tpr','temporaire')<cr>
         "                                                      │
-        "                                                      └─ returned by `s:get_expansion('tpr','adj')`
+        "                                                      └ returned by `s:get_expansion('tpr','adj')`
         "
         " We need `s:get_expansion()` because we don't know what's the key
         " inside `s:adj['tpr']`, containing the first true expansion of the
@@ -649,6 +649,7 @@ Pab adj  tpr  temporaire -- temporary
 Pab adv  bcp   beaucoup -- a\ lot\ of
 Pab adv  bdf   -- by\ default
 Pab adv  ctl   actuellement -- currently
+Pab adv  fsr   -- for\ some\ reason
 Pab adv  gnr   généralement -- generally
 Pab adv  pbb   probablement -- probably
 Pab adv  pdff  par\ défault
