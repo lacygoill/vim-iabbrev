@@ -29,10 +29,10 @@ digraphs pp 8230
 " ┌ ┐ └ ┘
 digraphs tl 9484 tr 9488 bl 9492 br 9496
 "        │       │       │       │
-"        │       │       │       └─ Bottom Right
-"        │       │       └─ Bottom Left
-"        │       └─ Top Right
-"        └─ Top Left
+"        │       │       │       └ Bottom Right
+"        │       │       └ Bottom Left
+"        │       └ Top Right
+"        └ Top Left
 
 " ∀ ∃
 digraphs fa 8704 te 8707
@@ -122,9 +122,9 @@ let g:Unicode_ConvertDigraphSubset = [
 " end-id: the end character is in 'isk', but not the others.
 " But this is limited:
 "
-"     - works only at the end of a word (suffix)
-"     - the {lhs} must use only characters outside of 'isk' except the last one
-"       which must be in 'isk'
+"    - works only at the end of a word (suffix)
+"    - the {lhs} must use only characters outside of 'isk' except the last one
+"      which must be in 'isk'
 "
 " Problem: What if we want to expand an abbreviation whose {lhs} is somewhere else?
 " Prefix, right in the middle of a word, anywhere ...
@@ -207,8 +207,8 @@ fu! s:expand_anywhere_abbr() abort
             " the expansion
             return repeat("\<BS>", strchars(key) + (after_space ? 1 : 0)).expansion.(after_space ? ' ' : '')
             "                                       │                                │
-            "                                       │                                └─ and reinsert it at the end
-            "                                       └─ if there was a space delete it
+            "                                       │                                └ and reinsert it at the end
+            "                                       └ if there was a space delete it
         endif
     endfor
     return "\<C-]>"
@@ -265,9 +265,9 @@ endfu
 let [s:adj, s:adv, s:noun, s:verb] = [{}, {}, {}, {}]
 fu! s:expand_adj(abbr,expansion) abort "{{{2
 "                     │
-"                     └─ the function doesn't need it: it's just for our
-"                        completion plugin, to get a description of what an
-"                        abbreviation will be expanded into
+"                     └ the function doesn't need it: it's just for our
+"                       completion plugin, to get a description of what an
+"                       abbreviation will be expanded into
 
     let prev_word = s:get_prev_word()
 
@@ -355,7 +355,7 @@ fu! s:expand_noun(abbr,expansion) abort "{{{2
         "                                                                                │
         if prev_word =~# '\v\c^%(un|l|[ld]e|ce%(t|tte)?|une|[mlts]a|[mts]on|d|du|au|1er|\de|quel%(le)?)$'
         "                           │
-        "                           └─ `l` is the previous word, if we type `l'argument`
+        "                           └ `l` is the previous word, if we type `l'argument`
             return s:noun[a:abbr].sg
 
         elseif prev_word =~# '\v\c^%(aux|\d+)$'
@@ -368,12 +368,12 @@ fu! s:expand_noun(abbr,expansion) abort "{{{2
         " should take care of several previous words which could appear before
         " a plural form:
         "
-        "               - [ldmts]es
-        "               - [nv]os
-        "               - leurs
-        "               - plusieurs
-        "               - certains
-        "               - quel%(le)?s
+        "    - [ldmts]es
+        "    - [nv]os
+        "    - leurs
+        "    - plusieurs
+        "    - certains
+        "    - quel%(le)?s
 
         elseif prev_word =~# 's$'
             return s:noun[a:abbr].pl
@@ -402,7 +402,7 @@ fu! s:expand_verb(abbr,expansion) abort "{{{2
         if prev_word =~# '\v\c^%(en)$'
             return s:verb[a:abbr]['fr_ant']
 
-        "                                       ┌─ negation
+        "                                       ┌ negation
         "                                       │
         elseif prev_word =~# '\v\c^%(il|elle|ça|ne|qui)$'
             return s:verb[a:abbr]['fr_il']
@@ -632,7 +632,7 @@ endfu
 
 " abbreviations {{{2
 
-"             ┌─ Poly abbreviation
+"             ┌ Poly abbreviation
 "             │
 com! -nargs=+ Pab call s:pab(<f-args>)
 
