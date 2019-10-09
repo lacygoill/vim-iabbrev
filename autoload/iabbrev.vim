@@ -191,7 +191,7 @@ fu! s:expand_anywhere_abbr() abort
         " we could hit `C-]` right after the abbreviation (no space between it
         " and the cursor), OR after a space
         let text_before_cursor = matchstr(getline('.'), repeat('.', strchars(key)).' \?\%'.col('.').'c')
-        let after_space = stridx(text_before_cursor, ' ') !=# -1
+        let after_space = stridx(text_before_cursor, ' ') != -1
 
         " if one of them matches the word before the cursor ...
         if text_before_cursor is# key || text_before_cursor is# key.' '
@@ -199,7 +199,7 @@ fu! s:expand_anywhere_abbr() abort
 
             " ... we use the first/french expansion  if there's only one word in
             " `expansions` or if we're in a french buffer
-            let expansion = len(expansions) ==# 1 || &l:spl is# 'fr'
+            let expansion = len(expansions) == 1 || &l:spl is# 'fr'
                         \ ?     expansions[0]
                         \ :     expansions[1]
 
@@ -466,7 +466,7 @@ endfu
 "                        │
 "                        └ short version of dernier
 fu! s:is_short_adj(abbr, key) abort
-    return stridx(s:adj[a:abbr][a:key], '"') !=# -1
+    return stridx(s:adj[a:abbr][a:key], '"') != -1
     \ && ( a:key is# 'les' || a:key is# 'la' )
 endfu
 
@@ -474,7 +474,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
     " check we've given a valid type to `:Pab`
     " also check that we gave at least one argument (the expanded word) besides
     " the abbreviation
-    if index(['adj', 'adv', 'noun', 'verb'], a:nature) ==# -1 || !exists('a:1')
+    if index(['adj', 'adv', 'noun', 'verb'], a:nature) == -1 || !exists('a:1')
         return
     endif
 
@@ -541,7 +541,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
 
         " if we didn't provide a plural form for a noun, use the same as the
         " singular with the additional suffix `s`
-        if len(fr_args) ==# 1
+        if len(fr_args) == 1
             let fr_args += [fr_args[0].'s']
         endif
 
@@ -591,14 +591,14 @@ fu! s:separate_args_enfr(args) abort "{{{2
     let hyphens = index(a:args, '--')
     " two hyphens are at the start of the command:
     "     :Pab abr -- abbreviation
-    if hyphens ==# 0
+    if hyphens == 0
         let en_args = a:args[1:]
         "                    │
         "                    └ ignore the `--` token
 
     " there are two hyphens somewhere in the middle
     "     :Pab abr french_abbr ... -- english_abbr
-    elseif hyphens !=# -1
+    elseif hyphens != -1
         let fr_args = a:args[0:hyphens-1]
         let en_args = a:args[hyphens+1:]
 
@@ -620,14 +620,14 @@ endfu
 fu! s:should_we_capitalize() abort "{{{2
 " Should `bdf` be expanded into `by default` or into `By default,`?
     let cml              = !empty(&l:cms) ? '\V\%('.escape(split(&l:cms, '%s', 1)[0], '\').'\)\?\v' : ''
-    let after_dot        = match(getline('.'), '\v%(\.|\?|!)\s+%'.col('.').'c') !=# -1
-    let after_nothing    = match(getline('.'), '\v^\s*'.cml.'\s*%'.col('.').'c') !=# -1
-    let dot_on_prev_line = match(getline(line('.')-1), '\v%(\.|\?|!)\s*$') !=# -1
-    let empty_prev_line  = match(getline(line('.')-1), '^\s*$') !=# -1
+    let after_dot        = match(getline('.'), '\v%(\.|\?|!)\s+%'.col('.').'c') != -1
+    let after_nothing    = match(getline('.'), '\v^\s*'.cml.'\s*%'.col('.').'c') != -1
+    let dot_on_prev_line = match(getline(line('.')-1), '\v%(\.|\?|!)\s*$') != -1
+    let empty_prev_line  = match(getline(line('.')-1), '^\s*$') != -1
 
     return after_dot || (
         \      after_nothing &&
-        \          (empty_prev_line || (dot_on_prev_line || line('.') ==# 1)))
+        \          (empty_prev_line || (dot_on_prev_line || line('.') == 1)))
 endfu
 
 " abbreviations {{{2
