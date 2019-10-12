@@ -161,9 +161,9 @@ let s:anywhere_abbr = {}
 "     let lhs = args[0]
 "     let rhs = args[1:]
 "}}}
-com! -nargs=+ Aab call s:add_anywhere_abbr(<f-args>)
+com -nargs=+ Aab call s:add_anywhere_abbr(<f-args>)
 
-fu! s:add_anywhere_abbr(lhs, ...)
+fu s:add_anywhere_abbr(lhs, ...)
     let rhs = join(a:000)
 
     " The default mapping or abbreviations commands (like :ino or
@@ -176,7 +176,7 @@ fu! s:add_anywhere_abbr(lhs, ...)
     let s:anywhere_abbr[a:lhs] = rhs
 endfu
 
-fu! s:expand_anywhere_abbr() abort
+fu s:expand_anywhere_abbr() abort
     " iterate over the abbreviations in `s:anywhere_abbr`
     let keys = keys(s:anywhere_abbr)
 
@@ -224,7 +224,7 @@ ino  <expr><unique>  <C-]>  <sid>expand_anywhere_abbr()
 "     {}    curly brackets or braces
 "     <>    angle brackets or chevrons
 
-fu! s:install_bracket_expansion_abbrev(brackets) abort
+fu s:install_bracket_expansion_abbrev(brackets) abort
     if a:brackets !~# '()\|\[\]\|{}' | return | endif
     let opening_bracket = a:brackets[0]
     let closing_bracket = a:brackets[1]
@@ -246,11 +246,11 @@ call s:install_bracket_expansion_abbrev('{}')
 " Automatic {{{1
 
 " This command should simply move the cursor on a duplicate abbreviation.
-com! -bar FindDuplicateAbbreviation call s:find_duplicate_abbreviation()
-" Do NOT add the `-buffer` attribute to  the command. It would be applied to the
-" buffer that Vim opens during a session.
+com -bar FindDuplicateAbbreviation call s:find_duplicate_abbreviation()
+" Do *not*  add the `-buffer` attribute  to the command. It would  be applied to
+" the buffer that Vim opens during a session.
 
-fu! s:find_duplicate_abbreviation() abort "{{{2
+fu s:find_duplicate_abbreviation() abort "{{{2
     let branch1 = 'Abolish\s+(\S+)\s+\_.*\_^Abolish\s+\zs\1\ze\s+'
     let branch2 = 'inorea%[bbrev]\s+(\S+)\s+\_.*\_^inorea%[bbrev]\s+\zs\2\ze\s+'
     let branch3 = 'Pab\s+%(adj|adv|noun|verb)\s+(\S+)\s+\_.*\_^Pab\s+%(adj|adv|noun|verb)\s+\zs\3\ze\s+'
@@ -263,11 +263,11 @@ fu! s:find_duplicate_abbreviation() abort "{{{2
 endfu
 
 let [s:adj, s:adv, s:noun, s:verb] = [{}, {}, {}, {}]
-fu! s:expand_adj(abbr,expansion) abort "{{{2
-"                     │
-"                     └ the function doesn't need it: it's just for our
-"                       completion plugin, to get a description of what an
-"                       abbreviation will be expanded into
+fu s:expand_adj(abbr,expansion) abort "{{{2
+"                    │
+"                    └ the function doesn't need it: it's just for our
+"                      completion plugin, to get a description of what an
+"                      abbreviation will be expanded into
 
     let prev_word = s:get_prev_word()
 
@@ -289,7 +289,7 @@ fu! s:expand_adj(abbr,expansion) abort "{{{2
     endif
 endfu
 
-fu! s:expand_adv(abbr,expansion) abort "{{{2
+fu s:expand_adv(abbr,expansion) abort "{{{2
     let prev_word = s:get_prev_word()
     let to_capitalize = s:should_we_capitalize()
 
@@ -329,7 +329,7 @@ fu! s:expand_adv(abbr,expansion) abort "{{{2
     endif
 endfu
 
-fu! s:expand_noun(abbr,expansion) abort "{{{2
+fu s:expand_noun(abbr,expansion) abort "{{{2
     let prev_word = s:get_prev_word()
 
     if &l:spl is# 'en'
@@ -384,7 +384,7 @@ fu! s:expand_noun(abbr,expansion) abort "{{{2
     endif
 endfu
 
-fu! s:expand_verb(abbr,expansion) abort "{{{2
+fu s:expand_verb(abbr,expansion) abort "{{{2
     let prev_word = s:get_prev_word()
 
     if &l:spl is# 'en'
@@ -423,7 +423,7 @@ fu! s:expand_verb(abbr,expansion) abort "{{{2
     endif
 endfu
 
-fu! s:get_expansion(abbr,type) abort "{{{2
+fu s:get_expansion(abbr,type) abort "{{{2
 " This function may be called like this:
 "     s:get_expansion('tpr','adj')
 "
@@ -434,7 +434,7 @@ fu! s:get_expansion(abbr,type) abort "{{{2
     return items(filter(deepcopy(s:{a:type}[a:abbr]), {_,v -> v isnot# a:abbr}))[0][1]
 endfu
 
-fu! s:get_prev_word() abort "{{{2
+fu s:get_prev_word() abort "{{{2
 " get the word before the cursor
 " necessary to know which form of the expansion should be used (plural, tense, ...)
 
@@ -465,12 +465,12 @@ endfu
 " Ex:    Pab drn dernier "s
 "                        │
 "                        └ short version of dernier
-fu! s:is_short_adj(abbr, key) abort
+fu s:is_short_adj(abbr, key) abort
     return stridx(s:adj[a:abbr][a:key], '"') != -1
     \ && ( a:key is# 'les' || a:key is# 'la' )
 endfu
 
-fu! s:pab(nature, abbr, ...) abort "{{{2
+fu s:pab(nature, abbr, ...) abort "{{{2
     " check we've given a valid type to `:Pab`
     " also check that we gave at least one argument (the expanded word) besides
     " the abbreviation
@@ -582,7 +582,7 @@ fu! s:pab(nature, abbr, ...) abort "{{{2
     endif
 endfu
 
-fu! s:separate_args_enfr(args) abort "{{{2
+fu s:separate_args_enfr(args) abort "{{{2
     let [fr_args, en_args] = [[], []]
 
     " check if there are two hyphens inside the arguments passed to `:Pab`
@@ -617,7 +617,7 @@ fu! s:separate_args_enfr(args) abort "{{{2
     return [fr_args, en_args]
 endfu
 
-fu! s:should_we_capitalize() abort "{{{2
+fu s:should_we_capitalize() abort "{{{2
 " Should `bdf` be expanded into `by default` or into `By default,`?
     let cml              = !empty(&l:cms) ? '\V\%('.escape(split(&l:cms, '%s', 1)[0], '\').'\)\?\v' : ''
     let after_dot        = match(getline('.'), '\v%(\.|\?|!)\s+%'.col('.').'c') != -1
@@ -632,9 +632,9 @@ endfu
 
 " abbreviations {{{2
 
-"             ┌ Poly abbreviation
-"             │
-com! -nargs=+ Pab call s:pab(<f-args>)
+"            ┌ Poly abbreviation
+"            │
+com -nargs=+ Pab call s:pab(<f-args>)
 
 " TODO:
 " add support for cycling, to get feminine plural and maybe for verb conjugations

@@ -4,12 +4,12 @@ endif
 let g:loaded_iabbrev = 1
 
 " Functions {{{1
-fu! s:lazy_load_vim_iabbrev() abort "{{{2
+fu s:lazy_load_vim_iabbrev() abort "{{{2
     exe 'so '.fnameescape(s:AUTOLOAD_SCRIPT)
     sil! unmap r
 endfu
 
-fu! s:my_r() abort "{{{2
+fu s:my_r() abort "{{{2
     call s:lazy_load_vim_iabbrev()
     return 'r'
 endfu
@@ -22,7 +22,8 @@ nno  <expr>  r  <sid>my_r()
 
 " Variables {{{1
 
-let s:AUTOLOAD_SCRIPT = expand('<sfile>:p:h:h').'/autoload/'.expand('<sfile>:t')
+const s:AUTOLOAD_SCRIPT = expand('<sfile>:p:h:h').'/autoload/'.expand('<sfile>:t')
+
 " Autocmd {{{1
 
 " Warning: Leave the autocmd at the end.{{{
