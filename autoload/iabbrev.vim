@@ -301,8 +301,8 @@ fu s:expand_adv(abbr,expansion) abort "{{{2
         " abbreviation at the beginning of a line, which follows a line ending
         " with a dot/bang/exclamation mark (ex: `autocmd!`), it's expanded like so:
         "
-        "         ctl
-        "         Ctl,~
+        "     ctl
+        "     Ctl,~
         "
         " NOTE:
         " We don't have this problem with verbs and adjectives, because we

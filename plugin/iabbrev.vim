@@ -5,6 +5,8 @@ let g:loaded_iabbrev = 1
 
 " Functions {{{1
 fu s:lazy_load_vim_iabbrev() abort "{{{2
+    au! lazy_load_vim_iabbrev
+    aug! lazy_load_vim_iabbrev
     exe 'so '.fnameescape(s:AUTOLOAD_SCRIPT)
     sil! unmap r
 endfu
@@ -39,13 +41,12 @@ const s:AUTOLOAD_SCRIPT = expand('<sfile>:p:h:h').'/autoload/'.expand('<sfile>:t
 "             > n
 "             ...
 "}}}
-unlet! s:did_shoot
-"              ┌ digraphs should be accessible on the command-line
-"              │ even if we haven't entered insert mode at least once
-"              │
-au InsertEnter,CmdlineEnter * ++once
-    \ if !get(s:, 'did_shoot', 0)
-    \ |     let s:did_shoot = 1
-    \ |     call s:lazy_load_vim_iabbrev()
-    \ | endif
-
+augroup lazy_load_vim_iabbrev
+    au!
+    " Why `CmdlineEnter`?{{{
+    "
+    " Digraphs  should be  accessible on  the  command-line even  if we  haven't
+    " entered insert mode at least once.
+    "}}}
+    au InsertEnter,CmdlineEnter * call s:lazy_load_vim_iabbrev()
+augroup END
