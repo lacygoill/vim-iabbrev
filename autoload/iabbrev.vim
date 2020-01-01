@@ -622,7 +622,7 @@ endfu
 
 fu s:should_we_capitalize() abort "{{{2
 " Should `bdf` be expanded into `by default` or into `By default,`?
-    let cml = !empty(&l:cms) ? '\V\%('..escape(split(&l:cms, '%s', 1)[0], '\')..'\)\=\m' : ''
+    let cml = !empty(&l:cms) ? '\V\%('..escape(matchstr(&l:cms, '\S*\ze\s*%s'), '\')..'\)\=\m' : ''
     let after_dot = match(getline('.'), '\%(\.\|?|!\)\s\+\%'..col('.')..'c') != -1
     let after_nothing = match(getline('.'), '^\s*'..cml..'\s*\%'..col('.')..'c') != -1
     let dot_on_prev_line = match(getline(line('.')-1), '\%(\.\|?\|!\)\s*$') != -1
