@@ -654,6 +654,7 @@ Pab adv  bdf   -- by\ default
 Pab adv  ctl   actuellement -- currently
 Pab adv  fsr   -- for\ some\ reason
 Pab adv  gnr   généralement -- generally
+Pab adv  imd   immédiatement -- immediately
 Pab adv  pbb   probablement -- probably
 Pab adv  pdff  par\ défault
 Pab adv  plq   plutôt\ que
