@@ -41,8 +41,7 @@ const s:AUTOLOAD_SCRIPT = expand('<sfile>:p:h:h')..'/autoload/'..expand('<sfile>
 "             > n
 "             ...
 "}}}
-augroup lazy_load_vim_iabbrev
-    au!
+augroup lazy_load_vim_iabbrev | au!
     " Why `CmdlineEnter`?{{{
     "
     " Digraphs  should be  accessible on  the  command-line even  if we  haven't
