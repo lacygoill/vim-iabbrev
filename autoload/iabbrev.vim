@@ -190,7 +190,7 @@ fu s:expand_anywhere_abbr() abort
         "
         " we could hit `C-]` right after the abbreviation (no space between it
         " and the cursor), OR after a space
-        let text_before_cursor = matchstr(getline('.'), repeat('.', strchars(key))..' \=\%'..col('.')..'c')
+        let text_before_cursor = matchstr(getline('.'), repeat('.', strchars(key, 1))..' \=\%'..col('.')..'c')
         let after_space = stridx(text_before_cursor, ' ') != -1
 
         " if one of them matches the word before the cursor ...
