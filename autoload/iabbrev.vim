@@ -153,8 +153,8 @@ let s:anywhere_abbr = {}
 
 " Why `<f-args>` instead of `<q-args>`?{{{
 "
-" The splitting  done by `<f-args>`  allows us  to immediately separate  the lhs
-" from the rhs of the abbreviation inside the function.
+" The splitting done by `<f-args>` lets us immediately separate the lhs from the
+" rhs of the abbreviation inside the function.
 " Otherwise, we would have to do sth like:
 "
 "     let args = split(a:1)
