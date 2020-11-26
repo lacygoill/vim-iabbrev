@@ -5,22 +5,17 @@ let g:loaded_iabbrev = 1
 
 " Functions {{{1
 fu s:lazy_load_vim_iabbrev() abort "{{{2
+    " The goal of  this function is to  make sure our digraphs are  accessible if we
+    " enter replace mode without having entered insert mode during the session.
     au! lazy_load_vim_iabbrev
     aug! lazy_load_vim_iabbrev
     exe 'so ' .. fnameescape(s:AUTOLOAD_SCRIPT)
     sil! unmap r
 endfu
-
-fu s:my_r() abort "{{{2
-    call s:lazy_load_vim_iabbrev()
-    return 'r'
-endfu
-" The goal of  this function is to  make sure our digraphs are  accessible if we
-" enter replace mode without having entered insert mode during the session.
 "}}}1
 " Mapping {{{1
 
-nno <expr> r <sid>my_r()
+nno r <cmd>call <sid>lazy_load_vim_iabbrev()<cr>r
 
 " Variables {{{1
 

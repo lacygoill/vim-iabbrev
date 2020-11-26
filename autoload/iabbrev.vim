@@ -520,16 +520,17 @@ fu s:pab(nature, abbr, ...) abort "{{{2
             \ })
 
         " Example of command executed by the next `exe`:
-        "     inorea <silent> tpr <c-r>=<sid>expand_adj('tpr','temporaire')<cr>
-        "                                                      │
-        "                                                      └ returned by `s:get_expansion('tpr','adj')`
+        "
+        "     inorea <silent> tpr <c-r><c-r>=<sid>expand_adj('tpr', 'temporaire')<cr>
+        "                                                            │
+        "                                                            └ returned by `s:get_expansion('tpr','adj')`
         "
         " We need `s:get_expansion()` because we don't know what's the key
         " inside `s:adj['tpr']`, containing the first true expansion of the
         " abbreviation.
         " Indeed, maybe the abbreviation is only expanded in english or only in french.
         exe 'inorea <silent> ' .. abbr
-        \ .. ' <c-r>=<sid>expand_adj(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'adj')->string() .. ')<cr>'
+        \ .. ' <c-r><c-r>=<sid>expand_adj(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'adj')->string() .. ')<cr>'
 
     elseif nature is# 'adv'
         let s:adv[abbr] = {
@@ -538,7 +539,7 @@ fu s:pab(nature, abbr, ...) abort "{{{2
             \ }
 
         exe 'inorea <silent> ' .. abbr
-        \ .. ' <c-r>=<sid>expand_adv(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'adv')->string() .. ')<cr>'
+        \ .. ' <c-r><c-r>=<sid>expand_adv(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'adv')->string() .. ')<cr>'
 
     elseif nature is# 'noun'
 
@@ -555,7 +556,7 @@ fu s:pab(nature, abbr, ...) abort "{{{2
             \ }
 
         exe 'inorea <silent> ' .. abbr
-        \ .. ' <c-r>=<sid>expand_noun(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'noun')->string() .. ')<cr>'
+        \ .. ' <c-r><c-r>=<sid>expand_noun(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'noun')->string() .. ')<cr>'
 
     elseif nature is# 'verb'
         let s:verb[abbr] = {
@@ -580,7 +581,7 @@ fu s:pab(nature, abbr, ...) abort "{{{2
         endif
 
         exe 'inorea <silent> ' .. abbr
-        \ .. ' <c-r>=<sid>expand_verb(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'verb')->string() .. ')<cr>'
+        \ .. ' <c-r><c-r>=<sid>expand_verb(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'verb')->string() .. ')<cr>'
     endif
 endfu
 
@@ -675,7 +676,7 @@ Pab adv  trm   autrement -- otherwise
 "}}}
 Pab adv  ac    avec
 " Alternative:
-"     inorea <silent> ar <c-r>=<sid>should_we_capitalize() ? 'As a result,' : 'as a result'<cr>
+"     inorea <silent> ar <c-r><c-r>=<sid>should_we_capitalize() ? 'As a result,' : 'as a result'<cr>
 Pab adv  aar   -- as\ a\ result
 Pab adv  cm    comme
 Pab adv  crr   correspondant\ à
