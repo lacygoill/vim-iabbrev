@@ -502,12 +502,12 @@ fu s:pab(nature, abbr, ...) abort "{{{2
 
     if nature is# 'adj'
 
-        let s:adj[abbr] = {
-            \ 'le': get(fr_args, '0', abbr),
-            \ 'les': get(fr_args, '1', abbr),
-            \ 'la': get(fr_args, '2', abbr),
-            \ 'les_fem': get(fr_args, '3', abbr),
-            \ 'english': get(en_args, '0', abbr),
+        let s:adj[abbr] = #{
+            \ le: get(fr_args, '0', abbr),
+            \ les: get(fr_args, '1', abbr),
+            \ la: get(fr_args, '2', abbr),
+            \ les_fem: get(fr_args, '3', abbr),
+            \ english: get(en_args, '0', abbr),
             \ }
 
         " add support for the following syntax:
@@ -521,25 +521,25 @@ fu s:pab(nature, abbr, ...) abort "{{{2
 
         " Example of command executed by the next `exe`:
         "
-        "     inorea <silent> tpr <c-r><c-r>=<sid>expand_adj('tpr', 'temporaire')<cr>
-        "                                                            │
-        "                                                            └ returned by `s:get_expansion('tpr','adj')`
+        "     inorea <silent> tpr <c-r>=<sid>expand_adj('tpr', 'temporaire')<cr>
+        "                                                       │
+        "                                                       └ returned by `s:get_expansion('tpr','adj')`
         "
         " We need `s:get_expansion()` because we don't know what's the key
         " inside `s:adj['tpr']`, containing the first true expansion of the
         " abbreviation.
         " Indeed, maybe the abbreviation is only expanded in english or only in french.
         exe 'inorea <silent> ' .. abbr
-        \ .. ' <c-r><c-r>=<sid>expand_adj(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'adj')->string() .. ')<cr>'
+        \ .. ' <c-r>=<sid>expand_adj(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'adj')->string() .. ')<cr>'
 
     elseif nature is# 'adv'
-        let s:adv[abbr] = {
-            \ 'french': get(fr_args, '0', abbr),
-            \ 'english': get(en_args, '0', abbr),
+        let s:adv[abbr] = #{
+            \ french: get(fr_args, '0', abbr),
+            \ english: get(en_args, '0', abbr),
             \ }
 
         exe 'inorea <silent> ' .. abbr
-        \ .. ' <c-r><c-r>=<sid>expand_adv(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'adv')->string() .. ')<cr>'
+        \ .. ' <c-r>=<sid>expand_adv(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'adv')->string() .. ')<cr>'
 
     elseif nature is# 'noun'
 
@@ -549,23 +549,23 @@ fu s:pab(nature, abbr, ...) abort "{{{2
             let fr_args += [fr_args[0] .. 's']
         endif
 
-        let s:noun[abbr] = {
-            \ 'sg': get(fr_args, '0', abbr),
-            \ 'pl': get(fr_args, '1', abbr),
-            \ 'english': get(en_args, '0', abbr),
+        let s:noun[abbr] = #{
+            \ sg: get(fr_args, '0', abbr),
+            \ pl: get(fr_args, '1', abbr),
+            \ english: get(en_args, '0', abbr),
             \ }
 
         exe 'inorea <silent> ' .. abbr
-        \ .. ' <c-r><c-r>=<sid>expand_noun(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'noun')->string() .. ')<cr>'
+        \ .. ' <c-r>=<sid>expand_noun(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'noun')->string() .. ')<cr>'
 
     elseif nature is# 'verb'
-        let s:verb[abbr] = {
-            \   'fr_inf': get(fr_args, '0', abbr),
-            \   'fr_il': get(fr_args, '1', abbr),
-            \   'fr_ils': get(fr_args, '2', abbr),
-            \   'fr_passe': get(fr_args, '3', abbr),
-            \   'fr_ant': get(fr_args, '4', abbr),
-            \   'en_inf': get(en_args, '0', abbr),
+        let s:verb[abbr] = #{
+            \   fr_inf: get(fr_args, '0', abbr),
+            \   fr_il: get(fr_args, '1', abbr),
+            \   fr_ils: get(fr_args, '2', abbr),
+            \   fr_passe: get(fr_args, '3', abbr),
+            \   fr_ant: get(fr_args, '4', abbr),
+            \   en_inf: get(en_args, '0', abbr),
             \ }
 
         " With the command:
@@ -573,15 +573,15 @@ fu s:pab(nature, abbr, ...) abort "{{{2
         "
         " ... `contains contained containing` should be deduced from `contain`
         if s:verb[abbr].en_inf isnot# abbr
-            call extend(s:verb[abbr], {
-                \   'en_s': s:verb[abbr].en_inf .. 's',
-                \   'en_ed': s:verb[abbr].en_inf .. 'ed',
-                \   'en_ing': matchstr(s:verb[abbr].en_inf, '.*\zee\=') .. 'ing',
+            call extend(s:verb[abbr], #{
+                \   en_s: s:verb[abbr].en_inf .. 's',
+                \   en_ed: s:verb[abbr].en_inf .. 'ed',
+                \   en_ing: matchstr(s:verb[abbr].en_inf, '.*\zee\=') .. 'ing',
                 \ } )
         endif
 
         exe 'inorea <silent> ' .. abbr
-        \ .. ' <c-r><c-r>=<sid>expand_verb(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'verb')->string() .. ')<cr>'
+        \ .. ' <c-r>=<sid>expand_verb(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'verb')->string() .. ')<cr>'
     endif
 endfu
 
@@ -602,8 +602,8 @@ fu s:separate_args_enfr(args) abort "{{{2
     " there are two hyphens somewhere in the middle
     "     :Pab abr french_abbr ... -- english_abbr
     elseif hyphens != -1
-        let fr_args = a:args[0:hyphens-1]
-        let en_args = a:args[hyphens+1:]
+        let fr_args = a:args[0: hyphens - 1]
+        let en_args = a:args[hyphens + 1 :]
 
         " if the argument after the two hyphens is a double quote, the english
         " abbreviation should be the same as the french one
@@ -676,7 +676,7 @@ Pab adv  trm   autrement -- otherwise
 "}}}
 Pab adv  ac    avec
 " Alternative:
-"     inorea <silent> ar <c-r><c-r>=<sid>should_we_capitalize() ? 'As a result,' : 'as a result'<cr>
+"     inorea <silent> ar <c-r>=<sid>should_we_capitalize() ? 'As a result,' : 'as a result'<cr>
 Pab adv  aar   -- as\ a\ result
 Pab adv  cm    comme
 Pab adv  crr   correspondant\ à
