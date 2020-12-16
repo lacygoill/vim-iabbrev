@@ -7,8 +7,8 @@ let g:loaded_iabbrev = 1
 fu s:lazy_load_vim_iabbrev() abort "{{{2
     " The goal of  this function is to  make sure our digraphs are  accessible if we
     " enter replace mode without having entered insert mode during the session.
-    au! lazy_load_vim_iabbrev
-    aug! lazy_load_vim_iabbrev
+    au! LazyLoadVimIabbrev
+    aug! LazyLoadVimIabbrev
     exe 'so ' .. fnameescape(s:AUTOLOAD_SCRIPT)
     sil! unmap r
 endfu
@@ -36,7 +36,7 @@ const s:AUTOLOAD_SCRIPT = expand('<sfile>:p:h:h') .. '/autoload/' .. expand('<sf
 "             > n
 "             ...
 "}}}
-augroup lazy_load_vim_iabbrev | au!
+augroup LazyLoadVimIabbrev | au!
     " Why `CmdlineEnter`?{{{
     "
     " Digraphs  should be  accessible on  the  command-line even  if we  haven't
