@@ -159,7 +159,7 @@ let s:anywhere_abbr = {}
 "
 "     let args = split(a:1)
 "     let lhs = args[0]
-"     let rhs = args[1:]
+"     let rhs = args[1 :]
 "}}}
 com -nargs=+ Aab call s:add_anywhere_abbr(<f-args>)
 
@@ -316,7 +316,7 @@ fu s:expand_adv(abbr,expansion) abort "{{{2
         endif
 
         return to_capitalize
-            \ ?     toupper(s:adv[a:abbr].english[0]) .. s:adv[a:abbr].english[1:] .. ','
+            \ ?     toupper(s:adv[a:abbr].english[0]) .. s:adv[a:abbr].english[1 :] .. ','
             \ :     s:adv[a:abbr].english
     else
         " an english abbreviation (like `ctl`) shouldn't be expanded into an
@@ -326,7 +326,7 @@ fu s:expand_adv(abbr,expansion) abort "{{{2
         endif
 
         return to_capitalize
-            \ ?     toupper(s:adv[a:abbr].french[0]) .. s:adv[a:abbr].french[1:] .. ','
+            \ ?     toupper(s:adv[a:abbr].french[0]) .. s:adv[a:abbr].french[1 :] .. ','
             \ :     s:adv[a:abbr].french
     endif
 endfu
@@ -516,7 +516,7 @@ fu s:pab(nature, abbr, ...) abort "{{{2
         "     Pab adj drn dernier    "s  dernière  "s
         call map(s:adj[abbr], {k, v -> !s:is_short_adj(abbr, k)
             \ ? v
-            \ : s:adj[abbr][k is# 'les' ? 'le' : 'la'] .. s:adj[abbr][k][1:]
+            \ : s:adj[abbr][k is# 'les' ? 'le' : 'la'] .. s:adj[abbr][k][1 :]
             \ })
 
         " Example of command executed by the next `exe`:
@@ -595,14 +595,14 @@ fu s:separate_args_enfr(args) abort "{{{2
     " two hyphens are at the start of the command:
     "     :Pab abr -- abbreviation
     if hyphens == 0
-        let en_args = a:args[1:]
+        let en_args = a:args[1 :]
         "                    │
         "                    └ ignore the `--` token
 
     " there are two hyphens somewhere in the middle
     "     :Pab abr french_abbr ... -- english_abbr
     elseif hyphens != -1
-        let fr_args = a:args[0: hyphens - 1]
+        let fr_args = a:args[0 : hyphens - 1]
         let en_args = a:args[hyphens + 1 :]
 
         " if the argument after the two hyphens is a double quote, the english
