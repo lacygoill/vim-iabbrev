@@ -189,7 +189,7 @@ def ExpandAnywhereAbbr(): string
         # we could hit `C-]` right after the abbreviation (no space between it
         # and the cursor), OR after a space
         var text_before_cursor: string = getline('.')
-            ->matchstr(repeat('.', strchars(key, v:true)) .. ' \=\%' .. col('.') .. 'c')
+            ->matchstr(repeat('.', strchars(key, true)) .. ' \=\%' .. col('.') .. 'c')
         var after_space: bool = stridx(text_before_cursor, ' ') != -1
 
         # if one of them matches the word before the cursor ...
