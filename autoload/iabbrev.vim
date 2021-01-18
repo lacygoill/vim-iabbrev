@@ -1,647 +1,673 @@
-if exists('g:autoloaded_iabbrev')
-    finish
-endif
-let g:autoloaded_iabbrev = 1
+vim9 noclear
 
-" Don't move the `Manual` section after the `Automatic`, because `s:pab()`
-" relies on `:Aab`.
-" Manual {{{1
+if exists('loaded') | finish | endif
+var loaded = true
 
-" no-break space
+# Don't move the `Manual` section after the `Automatic`, because `Pab()`
+# relies on `:Aab`.
+# Manual {{{1
+
+# no-break space
 digraphs ns 160
 
-" ∅
+# ∅
 digraphs o/ 8709
 
-" ✔ ✘
+# ✔ ✘
 digraphs ok 10004 no 10008
 
-" â ê î ô û
+# â ê î ô û
 digraphs aa 226 ee 234 ii 238 oo 244 uu 251
 
-" ù
-" Why `m`? It's close to the `ù` key.
+# ù
+# Why `m`? It's close to the `ù` key.
 digraphs um 249
 
-" …
+# …
 digraphs pp 8230
 
-" ┌ ┐ └ ┘
+# ┌ ┐ └ ┘
 digraphs tl 9484 tr 9488 bl 9492 br 9496
-"        │       │       │       │
-"        │       │       │       └ Bottom Right
-"        │       │       └ Bottom Left
-"        │       └ Top Right
-"        └ Top Left
+#        │       │       │       │
+#        │       │       │       └ Bottom Right
+#        │       │       └ Bottom Left
+#        │       └ Top Right
+#        └ Top Left
 
-" ∀ ∃
+# ∀ ∃
 digraphs fa 8704 te 8707
 
-" ∈ ∉
+# ∈ ∉
 digraphs e_ 8712 e/ 8713
 
-" ⊥
+# ⊥
 digraphs co 8869
 
-" ∧ ∨
+# ∧ ∨
 digraphs an 8743 or 8744
 
-" ↓ ↑ ↳
+# ↓ ↑ ↳
 digraph \|v 8595 \|^ 8593 \|> 8627
 
-" ≈
+# ≈
 digraphs =~ 8776
 
-" →
-" I often type `C-k f >` instead of `C-k - >`.
-" Handle this typo.
+# →
+# I often type `C-k f >` instead of `C-k - >`.
+# Handle this typo.
 digraphs f> 8594
 
 
-" `crg` is mapped to an operator defined in the unicode.vim plugin.
-" It searches for every pair of characters inside a text-object matching
-" a digraph, and when it finds one, converts it into the corresponding glyph.
-"
-" But we don't want all of them to be converted, otherwise it can converts
-" undesirable digraphs.  E.g.:
-"
-"     hello world    →    へllo をr┐
-"
-" We can restrict the digraph generation to certain digraphs only:
-let g:Unicode_ConvertDigraphSubset = [
-    \ char2nr("…"),
-    \ char2nr("∀"),
-    \ char2nr("∃"),
-    \ char2nr("∈"),
-    \ char2nr("∉"),
-    \ char2nr("∧"),
-    \ char2nr("∨"),
-    \ char2nr("⊥"),
-    \ char2nr("¬"),
-    \ char2nr("â"),
-    \ char2nr("ê"),
-    \ char2nr("î"),
-    \ char2nr("ô"),
-    \ char2nr("û"),
-    \ char2nr("€"),
-    \ char2nr("≤"),
-    \ char2nr("≥"),
-    \ char2nr("≈"),
-    \ char2nr("→"),
-    \ char2nr("←"),
-    \ char2nr("↑"),
-    \ char2nr("↓"),
-    \ char2nr("⇒"),
-    \ char2nr("⇐"),
-    \ char2nr("⇔"),
-    \ char2nr("✘"),
-    \ char2nr("✔"),
-    \ char2nr("₀"),
-    \ char2nr("₁"),
-    \ char2nr("₂"),
-    \ char2nr("₃"),
-    \ char2nr("₄"),
-    \ char2nr("₅"),
-    \ char2nr("₆"),
-    \ char2nr("₇"),
-    \ char2nr("₈"),
-    \ char2nr("₉"),
-    \ char2nr("⁰"),
-    \ char2nr("¹"),
-    \ char2nr("²"),
-    \ char2nr("³"),
-    \ char2nr("⁴"),
-    \ char2nr("⁵"),
-    \ char2nr("⁶"),
-    \ char2nr("⁷"),
-    \ char2nr("⁸"),
-    \ char2nr("⁹"),
-    \ ]
+# `crg` is mapped to an operator defined in the unicode.vim plugin.
+# It searches for every pair of characters inside a text-object matching
+# a digraph, and when it finds one, converts it into the corresponding glyph.
+#
+# But we don't want all of them to be converted, otherwise it can converts
+# undesirable digraphs.  E.g.:
+#
+#     hello world    →    へllo をr┐
+#
+# We can restrict the digraph generation to certain digraphs only:
+g:Unicode_ConvertDigraphSubset = [
+    char2nr("…"),
+    char2nr("∀"),
+    char2nr("∃"),
+    char2nr("∈"),
+    char2nr("∉"),
+    char2nr("∧"),
+    char2nr("∨"),
+    char2nr("⊥"),
+    char2nr("¬"),
+    char2nr("â"),
+    char2nr("ê"),
+    char2nr("î"),
+    char2nr("ô"),
+    char2nr("û"),
+    char2nr("€"),
+    char2nr("≤"),
+    char2nr("≥"),
+    char2nr("≈"),
+    char2nr("→"),
+    char2nr("←"),
+    char2nr("↑"),
+    char2nr("↓"),
+    char2nr("⇒"),
+    char2nr("⇐"),
+    char2nr("⇔"),
+    char2nr("✘"),
+    char2nr("✔"),
+    char2nr("₀"),
+    char2nr("₁"),
+    char2nr("₂"),
+    char2nr("₃"),
+    char2nr("₄"),
+    char2nr("₅"),
+    char2nr("₆"),
+    char2nr("₇"),
+    char2nr("₈"),
+    char2nr("₉"),
+    char2nr("⁰"),
+    char2nr("¹"),
+    char2nr("²"),
+    char2nr("³"),
+    char2nr("⁴"),
+    char2nr("⁵"),
+    char2nr("⁶"),
+    char2nr("⁷"),
+    char2nr("⁸"),
+    char2nr("⁹"),
+    ]
 
-" By default, the only type of abbreviation which can be expanded in a word is
-" end-id: the end character is in 'isk', but not the others.
-" But this is limited:
-"
-"    - works only at the end of a word (suffix)
-"    - the {lhs} must use only characters outside of 'isk' except the last one
-"      which must be in 'isk'
-"
-" Problem: What if we want to expand an abbreviation whose {lhs} is somewhere else?
-" Prefix, right in the middle of a word, anywhere ...
-" And what if the {lhs} we want doesn't follow the 2nd rule?
-" For example, what if we want a {lhs} whose last character is not in isk.
-"
-" Solution: We can add special abbreviations in the dictionary s:anywhere_abbr
-" and hit C-] to expand them.
-"
-" Inspiration:
-" https://vi.stackexchange.com/questions/6391/backspace-in-insert-abbreviation/6400#6400
-"
-" Usage:
-"     Aab xv ✔
-"
-" We may also pass a 2nd argument to `:Aab`; ex:
-"     Aab rmp remplacement replacement
-"
-" With 2 arguments, the abbreviation will look at `&spl` to decide whether it
-" must expand the abbreviation into the 1st or 2nd word.
+# By default, the only type of abbreviation which can be expanded in a word is
+# end-id: the end character is in 'isk', but not the others.
+# But this is limited:
+#
+#    - works only at the end of a word (suffix)
+#    - the {lhs} must use only characters outside of 'isk' except the last one
+#      which must be in 'isk'
+#
+# Problem: What if we want to expand an abbreviation whose {lhs} is somewhere else?
+# Prefix, right in the middle of a word, anywhere ...
+# And what if the {lhs} we want doesn't follow the 2nd rule?
+# For example, what if we want a {lhs} whose last character is not in isk.
+#
+# Solution: We can  add special abbreviations in  the dictionary `anywhere_abbr`
+# and hit `C-]` to expand them.
+#
+# Inspiration:
+# https://vi.stackexchange.com/questions/6391/backspace-in-insert-abbreviation/6400#6400
+#
+# Usage:
+#     Aab xv ✔
+#
+# We may also pass a 2nd argument to `:Aab`; ex:
+#     Aab rmp remplacement replacement
+#
+# With 2 arguments, the abbreviation will look at `&spl` to decide whether it
+# must expand the abbreviation into the 1st or 2nd word.
 
-" initialize `s:anywhere_abbr`
-" it's a dictionary, whose keys are abbreviations (ex: 'rmp'), and whose
-" values are lists containing 1 or 2 words (ex: ['remplacement', 'replacement'])
-let s:anywhere_abbr = {}
+# initialize `anywhere_abbr`
+# it's a dictionary, whose keys are abbreviations (ex: 'rmp'), and whose
+# values are lists containing 1 or 2 words (ex: ['remplacement', 'replacement'])
+var anywhere_abbr: dict<list<string>> = {}
 
-" Why `<f-args>` instead of `<q-args>`?{{{
-"
-" The splitting done by `<f-args>` lets us immediately separate the lhs from the
-" rhs of the abbreviation inside the function.
-" Otherwise, we would have to do sth like:
-"
-"     let args = split(a:1)
-"     let lhs = args[0]
-"     let rhs = args[1 :]
-"}}}
-com -nargs=+ Aab call s:add_anywhere_abbr(<f-args>)
+# Why `<f-args>` instead of `<q-args>`?{{{
+#
+# The splitting done by `<f-args>` lets us immediately separate the lhs from the
+# rhs of the abbreviation inside the function.
+# Otherwise, we would have to do sth like:
+#
+#     let args = split(a:1)
+#     let lhs = args[0]
+#     let rhs = args[1 :]
+#}}}
+com -nargs=+ Aab AddAnywhereAbbr(<f-args>)
 
-fu s:add_anywhere_abbr(lhs, ...)
-    let rhs = join(a:000)
+def AddAnywhereAbbr(lhs: string, ...l: list<string>)
+    var rhs: list<string> = join(l)
+        # The default mapping or abbreviations commands (like :ino or
+        # :inorea) automatically translate control characters.
+        # Our custom command :Aab should do the same.
+        ->substitute('<CR>', "\<CR>", 'g')
+        ->substitute('<Esc>', "\<Esc>", 'g')
+        ->split('\s*--\s*')
+    anywhere_abbr[lhs] = rhs
+enddef
 
-    " The default mapping or abbreviations commands (like :ino or
-    " :inorea) automatically translate control characters.
-    " Our custom command :Aab should do the same.
-    let rhs = substitute(rhs, '<CR>', "\<CR>", 'g')
-    let rhs = substitute(rhs, '<Esc>', "\<Esc>", 'g')
-    let rhs = split(rhs, '\s*--\s*')
-
-    let s:anywhere_abbr[a:lhs] = rhs
-endfu
-
-fu s:expand_anywhere_abbr() abort
-    " iterate over the abbreviations in `s:anywhere_abbr`
-    let keys = keys(s:anywhere_abbr)
+def ExpandAnywhereAbbr(): string
+    # iterate over the abbreviations in `anywhere_abbr`
+    var keys: list<string> = keys(anywhere_abbr)
 
     for key in keys
-        " capture the text befothe cursor with a possible space at the end
-        " why a space?
-        "
-        "     le drn|
-        "     le drn |
-        "           ^
-        "
-        " we could hit `C-]` right after the abbreviation (no space between it
-        " and the cursor), OR after a space
-        let text_before_cursor = getline('.')
-            \ ->matchstr(repeat('.', strchars(key, v:true)) .. ' \=\%' .. col('.') .. 'c')
-        let after_space = stridx(text_before_cursor, ' ') != -1
+        # capture the text befothe cursor with a possible space at the end
+        # why a space?
+        #
+        #     le drn|
+        #     le drn |
+        #           ^
+        #
+        # we could hit `C-]` right after the abbreviation (no space between it
+        # and the cursor), OR after a space
+        var text_before_cursor: string = getline('.')
+            ->matchstr(repeat('.', strchars(key, v:true)) .. ' \=\%' .. col('.') .. 'c')
+        var after_space: bool = stridx(text_before_cursor, ' ') != -1
 
-        " if one of them matches the word before the cursor ...
-        if text_before_cursor is# key || text_before_cursor is# key .. ' '
-            let expansions = s:anywhere_abbr[key]
+        # if one of them matches the word before the cursor ...
+        if text_before_cursor == key || text_before_cursor == key .. ' '
+            var expansions: list<string> = anywhere_abbr[key]
 
-            " ... we use the first/french expansion  if there's only one word in
-            " `expansions` or if we're in a french buffer
-            let expansion = len(expansions) == 1 || &l:spl is# 'fr'
-                \ ?     expansions[0]
-                \ :     expansions[1]
+            # ... we use the first/french expansion  if there's only one word in
+            # `expansions` or if we're in a french buffer
+            var expansion: string = len(expansions) == 1 || &l:spl == 'fr'
+                ?     expansions[0]
+                :     expansions[1]
 
-            " ... delete the abbreviation before  the cursor and replace it with
-            " the expansion
-            return repeat("\<BS>", strchars(key) + (after_space ? 1 : 0)) .. expansion .. (after_space ? ' ' : '')
-            "                                       │                                      │
-            "                                       │                                      └ and reinsert it at the end
-            "                                       └ if there was a space delete it
+            # ... delete the abbreviation before  the cursor and replace it with
+            # the expansion
+            return repeat("\<BS>", strchars(key)
+                # if there was a space delete it
+                + (after_space ? 1 : 0)) .. expansion
+                # and reinsert it at the end
+                .. (after_space ? ' ' : '')
         endif
     endfor
     return "\<C-]>"
-endfu
+enddef
 
-ino <expr><unique> <C-]> <sid>expand_anywhere_abbr()
+ino <expr><unique> <C-]> <sid>ExpandAnywhereAbbr()
 
-" BRACKET EXPANSION ON THE CHEAP
-"
-" Terminology:
-"     []    square brackets
-"     ()    round brackets or parentheses
-"     {}    curly brackets or braces
-"     <>    angle brackets or chevrons
+# BRACKET EXPANSION ON THE CHEAP
+#
+# Terminology:
+#     []    square brackets
+#     ()    round brackets or parentheses
+#     {}    curly brackets or braces
+#     <>    angle brackets or chevrons
 
-fu s:install_bracket_expansion_abbrev(brackets) abort
-    if a:brackets !~# '()\|\[\]\|{}' | return | endif
-    let opening_bracket = a:brackets[0]
-    let closing_bracket = a:brackets[1]
+def InstallBracketExpansionAbbrev(brackets: string)
+    if brackets !~ '()\|\[\]\|{}'
+        return
+    endif
+    var opening_bracket: string = brackets[0]
+    var closing_bracket: string = brackets[1]
 
-    " ( [ {
+    # ( [ {
     exe 'Aab ' .. opening_bracket .. ' ' .. opening_bracket .. "\<CR>" .. closing_bracket .. "\<Esc>O"
 
-    " [, {, [; {;
-    if opening_bracket =~# '[[{]'
+    # [, {, [; {;
+    if opening_bracket =~ '[[{]'
         exe 'Aab ' .. opening_bracket .. ', ' .. opening_bracket .. "\<CR>" .. closing_bracket .. ",\<Esc>O"
         exe 'Aab ' .. opening_bracket .. '; ' .. opening_bracket .. "\<CR>" .. closing_bracket .. ";\<Esc>O"
     endif
-endfu
+enddef
 
-call s:install_bracket_expansion_abbrev('()')
-call s:install_bracket_expansion_abbrev('[]')
-call s:install_bracket_expansion_abbrev('{}')
+InstallBracketExpansionAbbrev('()')
+InstallBracketExpansionAbbrev('[]')
+InstallBracketExpansionAbbrev('{}')
 
-" Automatic {{{1
+# Automatic {{{1
 
-" This command should simply move the cursor on a duplicate abbreviation.
-com -bar FindDuplicateAbbreviation call s:find_duplicate_abbreviation()
-" Do *not* add the  `-buffer` attribute to the command.  It  would be applied to
-" the buffer that Vim opens during a session.
+# This command should simply move the cursor on a duplicate abbreviation.
+com -bar FindDuplicateAbbreviation FindDuplicateAbbreviation()
+# Do *not* add the  `-buffer` attribute to the command.  It  would be applied to
+# the buffer that Vim opens during a session.
 
-fu s:find_duplicate_abbreviation() abort "{{{2
-    let branch1 = 'Abolish\s\+\(\S\+\)\s\+\_.*\_^Abolish\s\+\zs\1\ze\s\+'
-    let branch2 = 'inorea\%[bbrev]\s\+\(\S\+\)\s\+\_.*\_^inorea\%[bbrev]\s\+\zs\2\ze\s\+'
-    let branch3 = 'Pab\s\+\%(adj\|adv\|noun\|verb\)\s\+\(\S\+\)\s\+\_.*'
-        \ .. '\_^Pab\s\+\%(adj\|adv\|noun\|verb\)\s\+\zs\3\ze\s\+'
+def FindDuplicateAbbreviation() #{{{2
+    var branch1: string = 'Abolish\s\+\(\S\+\)\s\+\_.*\_^Abolish\s\+\zs\1\ze\s\+'
+    var branch2: string = 'inorea\%[bbrev]\s\+\(\S\+\)\s\+\_.*\_^inorea\%[bbrev]\s\+\zs\2\ze\s\+'
+    var branch3: string = 'Pab\s\+\%(adj\|adv\|noun\|verb\)\s\+\(\S\+\)\s\+\_.*'
+        .. '\_^Pab\s\+\%(adj\|adv\|noun\|verb\)\s\+\zs\3\ze\s\+'
 
-    let pattern = '^\%(' .. branch1 .. '\|' .. branch2 .. '\|' .. branch3 .. '\)'
-    let duplicate_line = search(pattern)
-    if !duplicate_line
+    var pattern: string = '^\%(' .. branch1 .. '\|' .. branch2 .. '\|' .. branch3 .. '\)'
+    var duplicate_line: number = search(pattern)
+    if duplicate_line == 0
         echo 'no duplicates'
     endif
-endfu
+enddef
 
-let [s:adj, s:adv, s:noun, s:verb] = [{}, {}, {}, {}]
-fu s:expand_adj(abbr, expansion) abort "{{{2
-"                     │
-"                     └ the function doesn't need it: it's just for our
-"                       completion plugin, to get a description of what an
-"                       abbreviation will be expanded into
+var adj: dict<dict<string>>
+var adv: dict<dict<string>>
+var noun: dict<dict<string>>
+var verb: dict<dict<string>>
 
-    let prev_word = s:get_prev_word()
+def ExpandAdj(abbr: string, expansion: string): string #{{{2
+#                           │
+#                           └ the function doesn't need it: it's just for our
+#                             completion plugin, to get a description of what an
+#                             abbreviation will be expanded into
 
-    if &l:spl is# 'en'
-        return s:adj[a:abbr].english
+    var prev_word: string = GetPrevWord()
+
+    if &l:spl == 'en'
+        return adj[abbr].english
     else
-        if prev_word =~# '\c^\%(un\|le\|[mts]on\|ce\%(tte\)\@!\|au\|était\|est\|sera\)$'
-            return s:adj[a:abbr].le
+        if prev_word =~ '\c^\%(un\|le\|[mts]on\|ce\%(tte\)\@!\|au\|était\|est\|sera\)$'
+            return adj[abbr].le
 
-        elseif prev_word =~# '\c^\%(une\|[lmts]a\|cette\)$'
-            return s:adj[a:abbr].la
+        elseif prev_word =~ '\c^\%(une\|[lmts]a\|cette\)$'
+            return adj[abbr].la
 
-        elseif prev_word =~# '\c^\%([ldmtsc]es\|aux\|[nv]os\|leurs\|étaient\|sont\|seront\)$'
-            return s:adj[a:abbr].les
+        elseif prev_word =~ '\c^\%([ldmtsc]es\|aux\|[nv]os\|leurs\|étaient\|sont\|seront\)$'
+            return adj[abbr].les
 
         else
-            return a:abbr
+            return abbr
         endif
     endif
-endfu
+enddef
 
-fu s:expand_adv(abbr,expansion) abort "{{{2
-    let prev_word = s:get_prev_word()
-    let to_capitalize = s:should_we_capitalize()
+def ExpandAdv(abbr: string, expansion: string): string #{{{2
+    var prev_word: string = GetPrevWord()
+    var to_capitalize: bool = ShouldWeCapitalize()
 
-    if &l:spl is# 'en'
+    if &l:spl == 'en'
 
-        " A french abbreviation (like `ctl`) shouldn't be expanded into an
-        " english buffer.
-        " Without this check, in an english buffer, if we type a french
-        " abbreviation at the beginning of a line, which follows a line ending
-        " with a dot/bang/exclamation mark (ex: `autocmd!`), it's expanded like so:
-        "
-        "     ctl
-        "     Ctl,~
-        "
-        " NOTE:
-        " We don't have this problem with verbs and adjectives, because we
-        " don't transform the keys (from the dictionaries) we return.
-        " But we have the same issue with english nouns, and more generally every
-        " time we transform a key before returning it (adding an `s`, a comma, ...).
-        if s:adv[a:abbr].english is# a:abbr
-            return a:abbr
+        # A french abbreviation (like `ctl`) shouldn't be expanded into an
+        # english buffer.
+        # Without this check, in an english buffer, if we type a french
+        # abbreviation at the beginning of a line, which follows a line ending
+        # with a dot/bang/exclamation mark (ex: `autocmd!`), it's expanded like so:
+        #
+        #     ctl
+        #     Ctl,~
+        #
+        # NOTE:
+        # We don't have this problem with verbs and adjectives, because we
+        # don't transform the keys (from the dictionaries) we return.
+        # But we have the same issue with english nouns, and more generally every
+        # time we transform a key before returning it (adding an `s`, a comma, ...).
+        if adv[abbr].english == abbr
+            return abbr
         endif
 
         return to_capitalize
-            \ ?     toupper(s:adv[a:abbr].english[0]) .. s:adv[a:abbr].english[1 :] .. ','
-            \ :     s:adv[a:abbr].english
+            ?     toupper(adv[abbr].english[0]) .. adv[abbr].english[1 :] .. ','
+            :     adv[abbr].english
     else
-        " an english abbreviation (like `ctl`) shouldn't be expanded into an
-        " french buffer
-        if s:adv[a:abbr].french is# a:abbr
-            return a:abbr
+        # an english abbreviation (like `ctl`) shouldn't be expanded into an
+        # french buffer
+        if adv[abbr].french == abbr
+            return abbr
         endif
 
         return to_capitalize
-            \ ?     toupper(s:adv[a:abbr].french[0]) .. s:adv[a:abbr].french[1 :] .. ','
-            \ :     s:adv[a:abbr].french
+            ?     toupper(adv[abbr].french[0]) .. adv[abbr].french[1 :] .. ','
+            :     adv[abbr].french
     endif
-endfu
+enddef
 
-fu s:expand_noun(abbr,expansion) abort "{{{2
-    let prev_word = s:get_prev_word()
+def ExpandNoun(abbr: string, expansion: string): string #{{{2
+    var prev_word: string = GetPrevWord()
 
-    if &l:spl is# 'en'
-        " A french abbreviation (like `dcl`) shouldn't be expanded into an
-        " english buffer.
-        " Without this check, in an english buffer, if we type `some dcl`,
-        " it's expanded like so:
-        "
-        "         some dcl
-        "         some dcls~
-        "
-        " NOTE:
-        " We don't have this problem with verbs and adjectives, because we
-        " don't transform the keys (from the dictionaries) we return.
-        " But we have the same issue with adverbs, and more generally every
-        " time we transform a key before returning it (adding an `s`, a comma, ...).
-        if s:noun[a:abbr].english is# a:abbr
-            return a:abbr
+    if &l:spl == 'en'
+        # A french abbreviation (like `dcl`) shouldn't be expanded into an
+        # english buffer.
+        # Without this check, in an english buffer, if we type `some dcl`,
+        # it's expanded like so:
+        #
+        #         some dcl
+        #         some dcls~
+        #
+        # NOTE:
+        # We don't have this problem with verbs and adjectives, because we
+        # don't transform the keys (from the dictionaries) we return.
+        # But we have the same issue with adverbs, and more generally every
+        # time we transform a key before returning it (adding an `s`, a comma, ...).
+        if noun[abbr].english == abbr
+            return abbr
         endif
-        return s:noun[a:abbr].english .. (prev_word =~# '\c^\%(most\|some\|th[e|o]se\|various\|\d\)$' ? 's' : '')
+        return noun[abbr].english .. (prev_word =~ '\c^\%(most\|some\|th[e|o]se\|various\|\d\)$' ? 's' : '')
     else
-        "                           ┌ `l` is the previous word, if we type `l'argument`
-        "                           │
-        if prev_word =~# '\c^\%(un\|l\|[ld]e\|ce\%(t\|tte\)\=\|une\|[mlts]a\|[mts]on'
-            \ .. '\|d\|du\|au\|1er\|\de\|quel\%(le\)\=\)$'
-            "                       ├┘
-            "                       └ digit
+        #                          ┌ `l` is the previous word, if we type `l'argument`
+        #                          │
+        if prev_word =~ '\c^\%(un\|l\|[ld]e\|ce\%(t\|tte\)\=\|une\|[mlts]a\|[mts]on'
+            .. '\|d\|du\|au\|1er\|[0-9]e\|quel\%(le\)\=\)$'
 
-            return s:noun[a:abbr].sg
+            return noun[abbr].sg
 
-        elseif prev_word =~# '\c^\%(aux\|\d\+\)$'
-            return s:noun[a:abbr].pl
+        elseif prev_word =~ '\c^\%(aux\|\d\+\)$'
+            return noun[abbr].pl
 
-        " if the previous word ends with an a `s`, expands the abbreviation into
-        " its plural form:
-        "         ce sont les derniers remplacements
-        "                            ^             ^
-        " should take care of several previous words which could appear before
-        " a plural form:
-        "
-        "    - [ldmts]es
-        "    - [nv]os
-        "    - leurs
-        "    - plusieurs
-        "    - certains
-        "    - quel%(le)?s
+        # if the previous word ends with an a `s`, expands the abbreviation into
+        # its plural form:
+        #         ce sont les derniers remplacements
+        #                            ^             ^
+        # should take care of several previous words which could appear before
+        # a plural form:
+        #
+        #    - [ldmts]es
+        #    - [nv]os
+        #    - leurs
+        #    - plusieurs
+        #    - certains
+        #    - quel%(le)?s
 
-        elseif prev_word =~# 's$'
-            return s:noun[a:abbr].pl
+        elseif prev_word =~ 's$'
+            return noun[abbr].pl
 
         else
-            return a:abbr
+            return abbr
         endif
     endif
-endfu
+enddef
 
-fu s:expand_verb(abbr,expansion) abort "{{{2
-    let prev_word = s:get_prev_word()
+def ExpandVerb(abbr: string, expansion: string): string #{{{2
+    var prev_word: string = GetPrevWord()
 
-    if &l:spl is# 'en'
-        if prev_word =~# '\c^\%(s\=he\|it\)$'
-            return s:verb[a:abbr]['en_s']
+    if &l:spl == 'en'
+        if prev_word =~ '\c^\%(s\=he\|it\)$'
+            return verb[abbr]['en_s']
 
-        elseif prev_word =~# '\c^\%(by\)$'
-            return s:verb[a:abbr]['en_ing']
+        elseif prev_word =~ '\c^\%(by\)$'
+            return verb[abbr]['en_ing']
 
         else
-            return s:verb[a:abbr]['en_inf']
+            return verb[abbr]['en_inf']
         endif
     else
 
-        if prev_word =~# '\c^\%(en\)$'
-            return s:verb[a:abbr]['fr_ant']
+        if prev_word =~ '\c^\%(en\)$'
+            return verb[abbr]['fr_ant']
 
-        "                                         ┌ negation
-        "                                         │
-        elseif prev_word =~# '\c^\%(il\|elle\|ça\|ne\|qui\)$'
-            return s:verb[a:abbr]['fr_il']
+        #                                        ┌ negation
+        #                                        │
+        elseif prev_word =~ '\c^\%(il\|elle\|ça\|ne\|qui\)$'
+            return verb[abbr]['fr_il']
 
-        " previously, we used this:
-        "     elseif prev_word =~# '\c^\%(ils\|elles\)$'
-        " but it missed sth like:
-        "     ces arguments prm
-        elseif prev_word =~# '\Cs$'
-            return s:verb[a:abbr]['fr_ils']
+        # previously, we used this:
+        #     elseif prev_word =~ '\c^\%(ils\|elles\)$'
+        # but it missed sth like:
+        #     ces arguments prm
+        elseif prev_word =~ '\Cs$'
+            return verb[abbr]['fr_ils']
 
-        elseif prev_word =~# '\c^\%(a\|ont\|fut\)$'
-            return s:verb[a:abbr]['fr_passe']
+        elseif prev_word =~ '\c^\%(a\|ont\|fut\)$'
+            return verb[abbr]['fr_passe']
 
         else
-            return s:verb[a:abbr]['fr_inf']
+            return verb[abbr]['fr_inf']
         endif
     endif
-endfu
+enddef
 
-fu s:get_expansion(abbr,type) abort "{{{2
-" This function may be called like this:
-"     s:get_expansion('tpr','adj')
-"
-" In this example, it must look inside the dictionary `s:adj['tpr']` and return
-" the first value which isn't 'tpr'.
-" We need this value to get a meaningful description of all our abbreviations
-" inside the popup completion menu.
-    return deepcopy(s:{a:type}[a:abbr])->filter({_, v -> v isnot# a:abbr})->items()[0][1]
-endfu
+def GetExpansion(abbr: string, type: string): string #{{{2
+# This function may be called like this:
+#     GetExpansion('tpr','adj')
+#
+# In this example, it must look inside the dictionary `adj['tpr']` and return
+# the first value which isn't 'tpr'.
+# We need this value to get a meaningful description of all our abbreviations
+# inside the popup completion menu.
+    var d: dict<string>
+    if type == 'adj'
+        d = adj[abbr]
+    elseif type == 'adv'
+        d = adv[abbr]
+    elseif type == 'noun'
+        d = noun[abbr]
+    elseif type == 'verb'
+        d = verb[abbr]
+    endif
+    return deepcopy(d)->filter((_, v) => v != abbr)->items()[0][1]
+enddef
 
-fu s:get_prev_word() abort "{{{2
-" get the word before the cursor
-" necessary to know which form of the expansion should be used (plural, tense, ...)
+def GetPrevWord(): string #{{{2
+# get the word before the cursor
+# necessary to know which form of the expansion should be used (plural, tense, ...)
 
-    " we split whenever there's a space or a single quote (to get `une` out of `d'une`)
-    let prev_words = getline('.')->matchstr('.*\%' .. col('.') .. 'c')->split("'\\| ")
+    # we split whenever there's a space or a single quote (to get `une` out of `d'une`)
+    var prev_words: list<string> = getline('.')
+        ->matchstr('.*\%' .. col('.') .. 'c')
+        ->split("'\\| ")
     return empty(prev_words) ? '' : prev_words[-1]
-endfu
+enddef
 
-" is_short_adj {{{2
+# IsShortAdj {{{2
 
-" this function receives an abbreviation and a key, and returns 1 if the
-" expansion of the abbreviation associated with the key contains a double
-" quote
-" Ex:
-"
-"     s:is_short_adj('drn', 'le')
-"     0  because :Pab drn dernier "s dernière "s~
-"                                    │~
-"                                    └ doesn't contain a double quote~
-"
-"     s:is_short_adj('drn', 'la')
-"     1  because :Pab drn dernier "s dernière "s~
-"                                             │~
-"                                             └ contains a double quote~
+# this function receives an abbreviation and a key, and returns 1 if the
+# expansion of the abbreviation associated with the key contains a double
+# quote
+# Ex:
+#
+#     IsShortAdj('drn', 'le')
+#     0  because :Pab drn dernier "s dernière "s~
+#                                    │~
+#                                    └ doesn't contain a double quote~
+#
+#     IsShortAdj('drn', 'la')
+#     1  because :Pab drn dernier "s dernière "s~
+#                                             │~
+#                                             └ contains a double quote~
 
-" we use this function to check whether a given argument passed to `:Pab` is
-" a short version of an expansion, and should be transformed
-" Ex:    Pab drn dernier "s
-"                        │
-"                        └ short version of dernier
-fu s:is_short_adj(abbr, key) abort
-    return stridx(s:adj[a:abbr][a:key], '"') != -1
-        \ && ( a:key is# 'les' || a:key is# 'la' )
-endfu
+# we use this function to check whether a given argument passed to `:Pab` is
+# a short version of an expansion, and should be transformed
+# Ex:    Pab drn dernier "s
+#                        │
+#                        └ short version of dernier
+def IsShortAdj(abbr: string, key: string): bool
+    return stridx(adj[abbr][key], '"') != -1
+        && ( key == 'les' || key == 'la' )
+enddef
 
-fu s:pab(nature, abbr, ...) abort "{{{2
-    " check we've given a valid type to `:Pab`
-    " also check that we gave at least one argument (the expanded word) besides
-    " the abbreviation
-    if index(['adj', 'adv', 'noun', 'verb'], a:nature) == -1 || !exists('a:1')
+def Pab(nature: string, abbr: string, ...l: list<string>) #{{{2
+    # Check we've given a valid type to `:Pab`.
+    # Also check that we gave at  least one argument (the expanded word) besides
+    # the abbreviation.
+    if index(['adj', 'adv', 'noun', 'verb'], nature) == -1 || empty(l)
         return
     endif
 
-    let [nature, abbr] = [a:nature, a:abbr]
-    let [fr_args, en_args] = s:separate_args_enfr(a:000)->deepcopy()
+    var fr_args: list<string>
+    var en_args: list<string>
+    [fr_args, en_args] = SeparateArgsEnfr(l)->deepcopy()
 
-    " add support for manual expansion when one should have occurred but didn't; ex:
-    "         la semaine drn
-    "         la semaine dernière~
-    exe 'Aab ' .. a:abbr .. ' ' .. escape(a:1, ' ') .. (empty(en_args) ? '' : ' -- ' .. escape(en_args[0], ' '))
-    "                              │{{{
-    "                              └ The expansion could contain a space.
-    "
-    " If it does, we need to escape it.
-    " Otherwise, when we manually expand the abbreviation, we would only get the
-    " last word.
-    " MWE:
-    " Try `bdf C-v SPC C-]`.
-    " Instead of getting `by default`, we would get `default`.
-    "}}}
+    # add support for manual expansion when one should have occurred but didn't; ex:
+    #         la semaine drn
+    #         la semaine dernière~
+    exe 'Aab ' .. abbr .. ' ' .. escape(l[0], ' ') .. (empty(en_args) ? '' : ' -- ' .. escape(en_args[0], ' '))
+    #                            │{{{
+    #                            └ The expansion could contain a space.
+    #
+    # If it does, we need to escape it.
+    # Otherwise, when we manually expand the abbreviation, we would only get the
+    # last word.
+    # MWE:
+    # Try `bdf C-v SPC C-]`.
+    # Instead of getting `by default`, we would get `default`.
+    #}}}
 
-    if nature is# 'adj'
+    if nature == 'adj'
 
-        let s:adj[abbr] = #{
-            \ le: get(fr_args, '0', abbr),
-            \ les: get(fr_args, '1', abbr),
-            \ la: get(fr_args, '2', abbr),
-            \ les_fem: get(fr_args, '3', abbr),
-            \ english: get(en_args, '0', abbr),
-            \ }
+        adj[abbr] = {
+            le: get(fr_args, 0, abbr),
+            les: get(fr_args, 1, abbr),
+            la: get(fr_args, 2, abbr),
+            les_fem: get(fr_args, 3, abbr),
+            english: get(en_args, 0, abbr),
+            }
 
-        " add support for the following syntax:
-        "
-        "     Pab adj crn courant    "s  courante  "es  --  current
-        "     Pab adj drn dernier    "s  dernière  "s
-        call map(s:adj[abbr], {k, v -> !s:is_short_adj(abbr, k)
-            \ ? v
-            \ : s:adj[abbr][k is# 'les' ? 'le' : 'la'] .. s:adj[abbr][k][1 :]
-            \ })
+        # add support for the following syntax:
+        #
+        #     Pab adj crn courant    "s  courante  "es  --  current
+        #     Pab adj drn dernier    "s  dernière  "s
+        map(adj[abbr], (k, v) => !IsShortAdj(abbr, k)
+            ? v
+            : adj[abbr][k == 'les' ? 'le' : 'la'] .. adj[abbr][k][1 :]
+            )
 
-        " Example of command executed by the next `exe`:
-        "
-        "     inorea <silent> tpr <c-r>=<sid>expand_adj('tpr', 'temporaire')<cr>
-        "                                                       │
-        "                                                       └ returned by `s:get_expansion('tpr','adj')`
-        "
-        " We need `s:get_expansion()` because we don't know what's the key
-        " inside `s:adj['tpr']`, containing the first true expansion of the
-        " abbreviation.
-        " Indeed, maybe the abbreviation is only expanded in english or only in french.
+        # Example of command executed by the next `exe`:
+        #
+        #     inorea <silent> tpr <c-r>=<sid>ExpandAdj('tpr', 'temporaire')<cr>
+        #                                                      │
+        #                                                      └ returned by `GetExpansion('tpr', 'adj')`
+        #
+        # We need `GetExpansion()` because we don't know what's the key
+        # inside `adj['tpr']`, containing the first true expansion of the
+        # abbreviation.
+        # Indeed, maybe the abbreviation is only expanded in english or only in french.
         exe 'inorea <silent> ' .. abbr
-        \ .. ' <c-r>=<sid>expand_adj(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'adj')->string() .. ')<cr>'
+             .. ' <c-r>=<sid>ExpandAdj(' .. string(abbr)
+             .. ', ' .. GetExpansion(abbr, 'adj')->string() .. ')<cr>'
 
-    elseif nature is# 'adv'
-        let s:adv[abbr] = #{
-            \ french: get(fr_args, '0', abbr),
-            \ english: get(en_args, '0', abbr),
-            \ }
+    elseif nature == 'adv'
+        adv[abbr] = {
+            french: get(fr_args, 0, abbr),
+            english: get(en_args, 0, abbr),
+            }
 
         exe 'inorea <silent> ' .. abbr
-        \ .. ' <c-r>=<sid>expand_adv(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'adv')->string() .. ')<cr>'
+            .. ' <c-r>=<sid>ExpandAdv(' .. string(abbr)
+            .. ', ' .. GetExpansion(abbr, 'adv')->string() .. ')<cr>'
 
-    elseif nature is# 'noun'
+    elseif nature == 'noun'
 
-        " if we didn't provide a plural form for a noun, use the same as the
-        " singular with the additional suffix `s`
+        # if we didn't provide a plural form for a noun, use the same as the
+        # singular with the additional suffix `s`
         if len(fr_args) == 1
-            let fr_args += [fr_args[0] .. 's']
+            fr_args += [fr_args[0] .. 's']
         endif
 
-        let s:noun[abbr] = #{
-            \ sg: get(fr_args, '0', abbr),
-            \ pl: get(fr_args, '1', abbr),
-            \ english: get(en_args, '0', abbr),
-            \ }
+        noun[abbr] = {
+            sg: get(fr_args, 0, abbr),
+            pl: get(fr_args, 1, abbr),
+            english: get(en_args, 0, abbr),
+            }
 
         exe 'inorea <silent> ' .. abbr
-        \ .. ' <c-r>=<sid>expand_noun(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'noun')->string() .. ')<cr>'
+            .. ' <c-r>=<sid>ExpandNoun(' .. string(abbr)
+            .. ', ' .. GetExpansion(abbr, 'noun')->string() .. ')<cr>'
 
-    elseif nature is# 'verb'
-        let s:verb[abbr] = #{
-            \   fr_inf: get(fr_args, '0', abbr),
-            \   fr_il: get(fr_args, '1', abbr),
-            \   fr_ils: get(fr_args, '2', abbr),
-            \   fr_passe: get(fr_args, '3', abbr),
-            \   fr_ant: get(fr_args, '4', abbr),
-            \   en_inf: get(en_args, '0', abbr),
-            \ }
+    elseif nature == 'verb'
+        verb[abbr] = {
+            fr_inf: get(fr_args, 0, abbr),
+            fr_il: get(fr_args, 1, abbr),
+            fr_ils: get(fr_args, 2, abbr),
+            fr_passe: get(fr_args, 3, abbr),
+            fr_ant: get(fr_args, 4, abbr),
+            en_inf: get(en_args, 0, abbr),
+            }
 
-        " With the command:
-        "     Pab verb ctn contenir contient contiennent contenu contenant -- contain
-        "
-        " ... `contains contained containing` should be deduced from `contain`
-        if s:verb[abbr].en_inf isnot# abbr
-            call extend(s:verb[abbr], #{
-                \   en_s: s:verb[abbr].en_inf .. 's',
-                \   en_ed: s:verb[abbr].en_inf .. 'ed',
-                \   en_ing: matchstr(s:verb[abbr].en_inf, '.*\zee\=') .. 'ing',
-                \ } )
+        # With the command:
+        #     Pab verb ctn contenir contient contiennent contenu contenant -- contain
+        #
+        # ... `contains contained containing` should be deduced from `contain`
+        if verb[abbr].en_inf != abbr
+            extend(verb[abbr], {
+                en_s: verb[abbr].en_inf .. 's',
+                en_ed: verb[abbr].en_inf .. 'ed',
+                en_ing: matchstr(verb[abbr].en_inf, '.*\zee\=') .. 'ing',
+                } )
         endif
 
         exe 'inorea <silent> ' .. abbr
-        \ .. ' <c-r>=<sid>expand_verb(' .. string(abbr) .. ',' .. s:get_expansion(abbr,'verb')->string() .. ')<cr>'
+            .. ' <c-r>=<sid>ExpandVerb(' .. string(abbr)
+            .. ', ' .. GetExpansion(abbr, 'verb')->string() .. ')<cr>'
     endif
-endfu
+enddef
 
-fu s:separate_args_enfr(args) abort "{{{2
-    let [fr_args, en_args] = [[], []]
+def SeparateArgsEnfr(args: list<string>): list<list<string>> #{{{2
+    var fr_args: list<string> = []
+    var en_args: list<string> = []
 
-    " check if there are two hyphens inside the arguments passed to `:Pab`
-    " two hyphens are used to end the french arguments; the next ones are
-    " english
-    let hyphens = index(a:args, '--')
-    " two hyphens are at the start of the command:
-    "     :Pab abr -- abbreviation
+    # check if there are two hyphens inside the arguments passed to `:Pab`
+    # two hyphens are used to end the french arguments; the next ones are
+    # english
+    var hyphens: number = index(args, '--')
+    # two hyphens are at the start of the command:
+    #     :Pab abr -- abbreviation
     if hyphens == 0
-        let en_args = a:args[1 :]
-        "                    │
-        "                    └ ignore the `--` token
+        en_args = args[1 :]
+        #              │
+        #              └ ignore the `--` token
 
-    " there are two hyphens somewhere in the middle
-    "     :Pab abr french_abbr ... -- english_abbr
+    # there are two hyphens somewhere in the middle
+    #     :Pab abr french_abbr ... -- english_abbr
     elseif hyphens != -1
-        let fr_args = a:args[0 : hyphens - 1]
-        let en_args = a:args[hyphens + 1 :]
+        fr_args = args[0 : hyphens - 1]
+        en_args = args[hyphens + 1 :]
 
-        " if the argument after the two hyphens is a double quote, the english
-        " abbreviation should be the same as the french one
-        "     :Pab noun agt argument -- "
-        if get(en_args, 0, '') is# '"'
-            let en_args[0] = fr_args[0]
+        # if the argument after the two hyphens is a double quote, the english
+        # abbreviation should be the same as the french one
+        #     :Pab noun agt argument -- "
+        if get(en_args, 0, '') == '"'
+            en_args[0] = fr_args[0]
         endif
 
-    " there are no two hyphens
-    "     :Pab abr french_abbr ...
+    # there are no two hyphens
+    #     :Pab abr french_abbr ...
     else
-        let fr_args = a:args
+        fr_args = args
     endif
     return [fr_args, en_args]
-endfu
+enddef
 
-fu s:should_we_capitalize() abort "{{{2
-" Should `bdf` be expanded into `by default` or into `By default,`?
-    let cml = !empty(&l:cms) ? '\V\%(' .. matchstr(&l:cms, '\S*\ze\s*%s')->escape('\') .. '\)\=\m' : ''
-    let after_dot = getline('.')->match('\%(\.\|?|!\)\s\+\%' .. col('.') .. 'c') != -1
-    let after_nothing = getline('.')->match('^\s*' .. cml .. '\s*\%' .. col('.') .. 'c') != -1
-    let dot_on_prev_line = (line('.') - 1)->getline()->match('\%(\.\|?\|!\)\s*$') != -1
-    let empty_prev_line = (line('.') - 1)->getline()->match('^\s*$') != -1
+def ShouldWeCapitalize(): bool #{{{2
+# Should `bdf` be expanded into `by default` or into `By default,`?
+    var cml: string = !empty(&l:cms)
+        ? '\V\%('
+            .. matchstr(&l:cms, '\S*\ze\s*%s')->escape('\')
+            .. '\)\=\m'
+        : ''
+    var line: string = getline('.')
+    var after_dot: bool = line->match('\%(\.\|?|!\)\s\+\%' .. col('.') .. 'c') != -1
+    var after_nothing: bool = line->match('^\s*' .. cml .. '\s*\%' .. col('.') .. 'c') != -1
+    var dot_on_prev_line: bool = (line('.') - 1)->getline()->match('\%(\.\|?\|!\)\s*$') != -1
+    var empty_prev_line: bool = (line('.') - 1)->getline()->match('^\s*$') != -1
 
     return after_dot || (
-        \      after_nothing &&
-        \          (empty_prev_line || (dot_on_prev_line || line('.') == 1)))
-endfu
+             after_nothing &&
+                 (empty_prev_line || (dot_on_prev_line || line('.') == 1)))
+enddef
 
-" abbreviations {{{2
+# abbreviations {{{2
 
-"            ┌ Poly abbreviation
-"            │
-com -nargs=+ Pab call s:pab(<f-args>)
+#            ┌ Poly abbreviation
+#            │
+com -nargs=+ Pab call Pab(<f-args>)
 
-" TODO:
-" add support for cycling, to get feminine plural and maybe for verb conjugations
-" use `C-]` (or `C-g j` and `C-g J`)
+# TODO:
+# add support for cycling, to get feminine plural and maybe for verb conjugations
+# use `C-]` (or `C-g j` and `C-g J`)
 
 Pab adj  crn  courant "s courante "es -- current
 Pab adj  drn  dernier "s dernière "s
@@ -663,20 +689,20 @@ Pab adv  tmt   automatiquement -- automatically
 Pab adv  tprr  temporairement -- temporarily
 Pab adv  trm   autrement -- otherwise
 
-" The following words are not all adverbs, but the “adverb” category seems to be
-" appropriate here.  It contains words wose form never changes (no conjugation).
-" Why do you use `:Pab` instead of `:inorea`?{{{
-"
-" `:inorea`  would make  the abbreviation  be  triggered no  matter the  current
-" language we're typing in.
-" Having a french  abbreviation being triggered while typing code  or writing in
-" english is annoying.
-" We want  french abbreviations to  be triggered  only when 'spelllang'  has the
-" value 'fr'.
-"}}}
+# The following words are not all adverbs, but the “adverb” category seems to be
+# appropriate here.  It contains words wose form never changes (no conjugation).
+# Why do you use `:Pab` instead of `:inorea`?{{{
+#
+# `:inorea`  would make  the abbreviation  be  triggered no  matter the  current
+# language we're typing in.
+# Having a french  abbreviation being triggered while typing code  or writing in
+# english is annoying.
+# We want  french abbreviations to  be triggered  only when 'spelllang'  has the
+# value 'fr'.
+#}}}
 Pab adv  ac    avec
-" Alternative:
-"     inorea <silent> ar <c-r>=<sid>should_we_capitalize() ? 'As a result,' : 'as a result'<cr>
+# Alternative:
+#     inorea <silent> ar <c-r>=<sid>ShouldWeCapitalize() ? 'As a result,' : 'as a result'<cr>
 Pab adv  aar   -- as\ a\ result
 Pab adv  cm    comme
 Pab adv  crr   correspondant\ à
@@ -752,8 +778,8 @@ inorea  tcm  autocmd
 inorea  td   TODO
 inorea  vai  via
 inorea  wsp  whitespace
-" }}}1
-" Teardown {{{1
+# }}}1
+# Teardown {{{1
 
 delc Aab
 delc Pab
