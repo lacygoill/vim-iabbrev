@@ -190,7 +190,7 @@ def ExpandAnywhereAbbr(): string
         # and the cursor), OR after a space
         var text_before_cursor: string = getline('.')
             ->matchstr(repeat('.', strchars(key, true)) .. ' \=\%' .. col('.') .. 'c')
-        var after_space: bool = stridx(text_before_cursor, ' ') != -1
+        var after_space: bool = stridx(text_before_cursor, ' ') >= 0
 
         # if one of them matches the word before the cursor ...
         if text_before_cursor == key || text_before_cursor == key .. ' '
@@ -485,7 +485,7 @@ enddef
 #                        │
 #                        └ short version of dernier
 def IsShortAdj(abbr: string, key: string): bool
-    return stridx(adj[abbr][key], '"') != -1
+    return stridx(adj[abbr][key], '"') >= 0
         && ( key == 'les' || key == 'la' )
 enddef
 
@@ -622,7 +622,7 @@ def SeparateArgsEnfr(args: list<string>): list<list<string>> #{{{2
 
     # there are two hyphens somewhere in the middle
     #     :Pab abr french_abbr ... -- english_abbr
-    elseif hyphens != -1
+    elseif hyphens >= 0
         fr_args = args[0 : hyphens - 1]
         en_args = args[hyphens + 1 :]
 
@@ -649,10 +649,10 @@ def ShouldWeCapitalize(): bool #{{{2
             .. '\)\=\m'
         : ''
     var line: string = getline('.')
-    var after_dot: bool = line->match('\%(\.\|?|!\)\s\+\%' .. col('.') .. 'c') != -1
-    var after_nothing: bool = line->match('^\s*' .. cml .. '\s*\%' .. col('.') .. 'c') != -1
-    var dot_on_prev_line: bool = (line('.') - 1)->getline()->match('\%(\.\|?\|!\)\s*$') != -1
-    var empty_prev_line: bool = (line('.') - 1)->getline()->match('^\s*$') != -1
+    var after_dot: bool = line->match('\%(\.\|?|!\)\s\+\%' .. col('.') .. 'c') >= 0
+    var after_nothing: bool = line->match('^\s*' .. cml .. '\s*\%' .. col('.') .. 'c') >= 0
+    var dot_on_prev_line: bool = (line('.') - 1)->getline()->match('\%(\.\|?\|!\)\s*$') >= 0
+    var empty_prev_line: bool = (line('.') - 1)->getline()->match('^\s*$') >= 0
 
     return after_dot || (
              after_nothing &&
