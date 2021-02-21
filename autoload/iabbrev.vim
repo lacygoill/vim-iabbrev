@@ -448,7 +448,9 @@ def GetExpansion(abbr: string, type: string): string #{{{2
     elseif type == 'verb'
         d = verb[abbr]
     endif
-    return deepcopy(d)->filter((_, v) => v != abbr)->items()[0][1]
+    return deepcopy(d)
+        ->filter((_, v: string): bool => v != abbr)
+        ->items()[0][1]
 enddef
 
 def GetPrevWord(): string #{{{2
@@ -530,10 +532,11 @@ def Pab(nature: string, abbr: string, ...l: list<string>) #{{{2
         #
         #     Pab adj crn courant    "s  courante  "es  --  current
         #     Pab adj drn dernier    "s  dernière  "s
-        map(adj[abbr], (k, v) => !IsShortAdj(abbr, k)
-            ? v
-            : adj[abbr][k == 'les' ? 'le' : 'la'] .. adj[abbr][k][1 :]
-            )
+        map(adj[abbr], (k: string, v: string): string =>
+            !IsShortAdj(abbr, k)
+                ? v
+                : adj[abbr][k == 'les' ? 'le' : 'la'] .. adj[abbr][k][1 :]
+                )
 
         # Example of command executed by the next `exe`:
         #
