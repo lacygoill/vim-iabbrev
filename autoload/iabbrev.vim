@@ -149,7 +149,7 @@ g:Unicode_ConvertDigraphSubset = [
 # initialize `anywhere_abbr`
 # it's a dictionary, whose keys are abbreviations (ex: 'rmp'), and whose
 # values are lists containing 1 or 2 words (ex: ['remplacement', 'replacement'])
-var anywhere_abbr: dict<list<string>> = {}
+var anywhere_abbr: dict<list<string>>
 
 # Why `<f-args>` instead of `<q-args>`?{{{
 #
@@ -279,16 +279,16 @@ def ExpandAdj(abbr: string, expansion: string): string #{{{2
     var prev_word: string = GetPrevWord()
 
     if &l:spl == 'en'
-        return adj[abbr].english
+        return adj[abbr]['english']
     else
         if prev_word =~ '\c^\%(un\|le\|[mts]on\|ce\%(tte\)\@!\|au\|était\|est\|sera\)$'
-            return adj[abbr].le
+            return adj[abbr]['le']
 
         elseif prev_word =~ '\c^\%(une\|[lmts]a\|cette\)$'
-            return adj[abbr].la
+            return adj[abbr]['la']
 
         elseif prev_word =~ '\c^\%([ldmtsc]es\|aux\|[nv]os\|leurs\|étaient\|sont\|seront\)$'
-            return adj[abbr].les
+            return adj[abbr]['les']
 
         else
             return abbr
@@ -316,23 +316,23 @@ def ExpandAdv(abbr: string, expansion: string): string #{{{2
         # don't transform the keys (from the dictionaries) we return.
         # But we have the same issue with english nouns, and more generally every
         # time we transform a key before returning it (adding an `s`, a comma, ...).
-        if adv[abbr].english == abbr
+        if adv[abbr]['english'] == abbr
             return abbr
         endif
 
         return to_capitalize
-            ?     toupper(adv[abbr].english[0]) .. adv[abbr].english[1 :] .. ','
-            :     adv[abbr].english
+            ?     toupper(adv[abbr]['english'][0]) .. adv[abbr]['english'][1 :] .. ','
+            :     adv[abbr]['english']
     else
         # an english abbreviation (like `ctl`) shouldn't be expanded into an
         # french buffer
-        if adv[abbr].french == abbr
+        if adv[abbr]['french'] == abbr
             return abbr
         endif
 
         return to_capitalize
-            ?     toupper(adv[abbr].french[0]) .. adv[abbr].french[1 :] .. ','
-            :     adv[abbr].french
+            ?     toupper(adv[abbr]['french'][0]) .. adv[abbr]['french'][1 :] .. ','
+            :     adv[abbr]['french']
     endif
 enddef
 
@@ -353,20 +353,20 @@ def ExpandNoun(abbr: string, expansion: string): string #{{{2
         # don't transform the keys (from the dictionaries) we return.
         # But we have the same issue with adverbs, and more generally every
         # time we transform a key before returning it (adding an `s`, a comma, ...).
-        if noun[abbr].english == abbr
+        if noun[abbr]['english'] == abbr
             return abbr
         endif
-        return noun[abbr].english .. (prev_word =~ '\c^\%(most\|some\|th[e|o]se\|various\|\d\)$' ? 's' : '')
+        return noun[abbr]['english'] .. (prev_word =~ '\c^\%(most\|some\|th[e|o]se\|various\|\d\)$' ? 's' : '')
     else
         #                          ┌ `l` is the previous word, if we type `l'argument`
         #                          │
         if prev_word =~ '\c^\%(un\|l\|[ld]e\|ce\%(t\|tte\)\=\|une\|[mlts]a\|[mts]on'
             .. '\|d\|du\|au\|1er\|[0-9]e\|quel\%(le\)\=\)$'
 
-            return noun[abbr].sg
+            return noun[abbr]['sg']
 
         elseif prev_word =~ '\c^\%(aux\|\d\+\)$'
-            return noun[abbr].pl
+            return noun[abbr]['pl']
 
         # if the previous word ends with an a `s`, expands the abbreviation into
         # its plural form:
@@ -383,7 +383,7 @@ def ExpandNoun(abbr: string, expansion: string): string #{{{2
         #    - quel%(le)?s
 
         elseif prev_word =~ 's$'
-            return noun[abbr].pl
+            return noun[abbr]['pl']
 
         else
             return abbr
@@ -594,11 +594,11 @@ def Pab(nature: string, abbr: string, ...l: list<string>) #{{{2
         #     Pab verb ctn contenir contient contiennent contenu contenant -- contain
         #
         # ... `contains contained containing` should be deduced from `contain`
-        if verb[abbr].en_inf != abbr
+        if verb[abbr]['en_inf'] != abbr
             extend(verb[abbr], {
-                en_s: verb[abbr].en_inf .. 's',
-                en_ed: verb[abbr].en_inf .. 'ed',
-                en_ing: matchstr(verb[abbr].en_inf, '.*\zee\=') .. 'ing',
+                en_s: verb[abbr]['en_inf'] .. 's',
+                en_ed: verb[abbr]['en_inf'] .. 'ed',
+                en_ing: matchstr(verb[abbr]['en_inf'], '.*\zee\=') .. 'ing',
                 } )
         endif
 
@@ -609,8 +609,8 @@ def Pab(nature: string, abbr: string, ...l: list<string>) #{{{2
 enddef
 
 def SeparateArgsEnfr(args: list<string>): list<list<string>> #{{{2
-    var fr_args: list<string> = []
-    var en_args: list<string> = []
+    var fr_args: list<string>
+    var en_args: list<string>
 
     # check if there are two hyphens inside the arguments passed to `:Pab`
     # two hyphens are used to end the french arguments; the next ones are
