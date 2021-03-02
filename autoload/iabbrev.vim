@@ -448,7 +448,8 @@ def GetExpansion(abbr: string, type: string): string #{{{2
     elseif type == 'verb'
         d = verb[abbr]
     endif
-    return deepcopy(d)
+    return d
+        ->deepcopy()
         ->filter((_, v: string): bool => v != abbr)
         ->items()[0][1]
 enddef
@@ -532,11 +533,11 @@ def Pab(nature: string, abbr: string, ...l: list<string>) #{{{2
         #
         #     Pab adj crn courant    "s  courante  "es  --  current
         #     Pab adj drn dernier    "s  dernière  "s
-        map(adj[abbr], (k: string, v: string): string =>
-            !IsShortAdj(abbr, k)
-                ? v
-                : adj[abbr][k == 'les' ? 'le' : 'la'] .. adj[abbr][k][1 :]
-                )
+        adj[abbr]
+            ->map((k: string, v: string): string =>
+                    !IsShortAdj(abbr, k)
+                    ?     v
+                    :     adj[abbr][k == 'les' ? 'le' : 'la'] .. adj[abbr][k][1 :])
 
         # Example of command executed by the next `exe`:
         #
@@ -647,13 +648,15 @@ enddef
 def ShouldWeCapitalize(): bool #{{{2
 # Should `bdf` be expanded into `by default` or into `By default,`?
     var cml: string = !empty(&l:cms)
-        ? '\V\%('
-            .. matchstr(&l:cms, '\S*\ze\s*%s')->escape('\')
-            .. '\)\=\m'
+        ?    '\V'
+          .. '\%('
+          ..     matchstr(&l:cms, '\S*\ze\s*%s')->escape('\')
+          .. '\)\='
+          .. '\m'
         : ''
     var line: string = getline('.')
-    var after_dot: bool = line->match('\%(\.\|?|!\)\s\+\%' .. col('.') .. 'c') >= 0
-    var after_nothing: bool = line->match('^\s*' .. cml .. '\s*\%' .. col('.') .. 'c') >= 0
+    var after_dot: bool = match(line, '\%(\.\|?|!\)\s\+\%' .. col('.') .. 'c') >= 0
+    var after_nothing: bool = match(line, '^\s*' .. cml .. '\s*\%' .. col('.') .. 'c') >= 0
     var dot_on_prev_line: bool = (line('.') - 1)->getline()->match('\%(\.\|?\|!\)\s*$') >= 0
     var empty_prev_line: bool = (line('.') - 1)->getline()->match('^\s*$') >= 0
 
