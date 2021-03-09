@@ -204,7 +204,7 @@ def ExpandAnywhereAbbr(): string
 
             # ... delete the abbreviation before  the cursor and replace it with
             # the expansion
-            return repeat("\<BS>", strchars(key)
+            return repeat("\<BS>", strchars(key, true)
                 # if there was a space delete it
                 + (after_space ? 1 : 0)) .. expansion
                 # and reinsert it at the end
