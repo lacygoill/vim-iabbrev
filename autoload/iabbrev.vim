@@ -189,7 +189,7 @@ def ExpandAnywhereAbbr(): string
         # we could hit `C-]` right after the abbreviation (no space between it
         # and the cursor), OR after a space
         var text_before_cursor: string = getline('.')
-            ->matchstr(repeat('.', strchars(key, true)) .. ' \=\%' .. col('.') .. 'c')
+            ->matchstr(repeat('.', strcharlen(key)) .. ' \=\%' .. col('.') .. 'c')
         var after_space: bool = stridx(text_before_cursor, ' ') >= 0
 
         # if one of them matches the word before the cursor ...
@@ -204,7 +204,7 @@ def ExpandAnywhereAbbr(): string
 
             # ... delete the abbreviation before  the cursor and replace it with
             # the expansion
-            return repeat("\<BS>", strchars(key, true)
+            return repeat("\<BS>", strcharlen(key)
                 # if there was a space delete it
                 + (after_space ? 1 : 0)) .. expansion
                 # and reinsert it at the end
@@ -395,10 +395,10 @@ def ExpandVerb(abbr: string, expansion: string): string #{{{2
     var prev_word: string = GetPrevWord()
 
     if &l:spl == 'en'
-        if prev_word =~ '\c^\%(s\=he\|it\)$'
+        if prev_word =~ '^\c\%(s\=he\|it\)$'
             return verb[abbr]['en_s']
 
-        elseif prev_word =~ '\c^\%(by\)$'
+        elseif prev_word =~ '^\c\%(by\)$'
             return verb[abbr]['en_ing']
 
         else
@@ -460,7 +460,7 @@ def GetPrevWord(): string #{{{2
 
     # we split whenever there's a space or a single quote (to get `une` out of `d'une`)
     var prev_words: list<string> = getline('.')
-        ->matchstr('.*\%' .. col('.') .. 'c')
+        ->strpart(0, col('.') - 1)
         ->split("'\\| ")
     return empty(prev_words) ? '' : prev_words[-1]
 enddef
@@ -599,7 +599,7 @@ def Pab(nature: string, abbr: string, ...l: list<string>) #{{{2
             extend(verb[abbr], {
                 en_s: verb[abbr]['en_inf'] .. 's',
                 en_ed: verb[abbr]['en_inf'] .. 'ed',
-                en_ing: matchstr(verb[abbr]['en_inf'], '.*\zee\=') .. 'ing',
+                en_ing: verb[abbr]['en_inf']->substitute('e$', '', '') .. 'ing',
                 } )
         endif
 
