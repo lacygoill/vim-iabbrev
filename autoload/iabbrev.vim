@@ -116,7 +116,7 @@ g:Unicode_ConvertDigraphSubset = [
     char2nr("⁷"),
     char2nr("⁸"),
     char2nr("⁹"),
-    ]
+]
 
 # By default, the only type of abbreviation which can be expanded in a word is
 # end-id: the end character is in 'isk', but not the others.
@@ -164,7 +164,8 @@ var anywhere_abbr: dict<list<string>>
 com -nargs=+ Aab AddAnywhereAbbr(<f-args>)
 
 def AddAnywhereAbbr(lhs: string, ...l: list<string>)
-    var rhs: list<string> = join(l)
+    var rhs: list<string> = l
+        ->join()
         # The default mapping or abbreviations commands (like :ino or
         # :inorea) automatically translate control characters.
         # Our custom command :Aab should do the same.
@@ -492,7 +493,11 @@ def IsShortAdj(abbr: string, key: string): bool
         && ( key == 'les' || key == 'la' )
 enddef
 
-def Pab(nature: string, abbr: string, ...l: list<string>) #{{{2
+def Pab( #{{{2
+    nature: string,
+    abbr: string,
+    ...l: list<string>
+)
     # Check we've given a valid type to `:Pab`.
     # Also check that we gave at  least one argument (the expanded word) besides
     # the abbreviation.
@@ -527,7 +532,7 @@ def Pab(nature: string, abbr: string, ...l: list<string>) #{{{2
             la: get(fr_args, 2, abbr),
             les_fem: get(fr_args, 3, abbr),
             english: get(en_args, 0, abbr),
-            }
+        }
 
         # add support for the following syntax:
         #
@@ -557,7 +562,7 @@ def Pab(nature: string, abbr: string, ...l: list<string>) #{{{2
         adv[abbr] = {
             french: get(fr_args, 0, abbr),
             english: get(en_args, 0, abbr),
-            }
+        }
 
         exe 'inorea <silent> ' .. abbr
             .. ' <c-r>=<sid>ExpandAdv(' .. string(abbr)
@@ -575,7 +580,7 @@ def Pab(nature: string, abbr: string, ...l: list<string>) #{{{2
             sg: get(fr_args, 0, abbr),
             pl: get(fr_args, 1, abbr),
             english: get(en_args, 0, abbr),
-            }
+        }
 
         exe 'inorea <silent> ' .. abbr
             .. ' <c-r>=<sid>ExpandNoun(' .. string(abbr)
@@ -589,7 +594,7 @@ def Pab(nature: string, abbr: string, ...l: list<string>) #{{{2
             fr_passe: get(fr_args, 3, abbr),
             fr_ant: get(fr_args, 4, abbr),
             en_inf: get(en_args, 0, abbr),
-            }
+        }
 
         # With the command:
         #     Pab verb ctn contenir contient contiennent contenu contenant -- contain
@@ -669,7 +674,7 @@ enddef
 
 #            ┌ Poly abbreviation
 #            │
-com -nargs=+ Pab call Pab(<f-args>)
+com -nargs=+ Pab Pab(<f-args>)
 
 # TODO:
 # add support for cycling, to get feminine plural and maybe for verb conjugations
