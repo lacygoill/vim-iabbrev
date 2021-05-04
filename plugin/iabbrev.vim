@@ -8,7 +8,9 @@ def LazyLoadVimIabbrev() #{{{2
     # The goal of  this function is to  make sure our digraphs are  accessible if we
     # enter replace mode without having entered insert mode during the session.
     au! LazyLoadVimIabbrev
-    aug! LazyLoadVimIabbrev
+    # `sil!` to suppress `E936: Cannot delete the current group`.
+    # Only seems to happen when starting in debug mode: `$ vim -D`.
+    sil! aug! LazyLoadVimIabbrev
     exe 'so ' .. fnameescape(AUTOLOAD_SCRIPT)
     sil! unmap r
 enddef

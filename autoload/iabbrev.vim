@@ -655,7 +655,7 @@ def ShouldWeCapitalize(): bool #{{{2
     var cml: string = !empty(&l:cms)
         ?    '\V'
           .. '\%('
-          ..     matchstr(&l:cms, '\S*\ze\s*%s')->escape('\')
+          ..     &l:cms->matchstr('\S*\ze\s*%s')->escape('\')
           .. '\)\='
           .. '\m'
         : ''
