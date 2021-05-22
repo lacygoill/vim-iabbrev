@@ -57,6 +57,9 @@ digraphs =~ 8776
 # Handle this typo.
 digraphs f> 8594
 
+# ˜
+digraphs ti 732
+
 
 # `crg` is mapped to an operator defined in the unicode.vim plugin.
 # It searches for every pair of characters inside a text-object matching
@@ -310,7 +313,7 @@ def ExpandAdv(abbr: string, expansion: string): string #{{{2
         # with a dot/bang/exclamation mark (ex: `autocmd!`), it's expanded like so:
         #
         #     ctl
-        #     Ctl,~
+        #     Ctl,˜
         #
         # NOTE:
         # We don't have this problem with verbs and adjectives, because we
@@ -347,7 +350,7 @@ def ExpandNoun(abbr: string, expansion: string): string #{{{2
         # it's expanded like so:
         #
         #         some dcl
-        #         some dcls~
+        #         some dcls˜
         #
         # NOTE:
         # We don't have this problem with verbs and adjectives, because we
@@ -474,14 +477,14 @@ enddef
 # Ex:
 #
 #     IsShortAdj('drn', 'le')
-#     0  because :Pab drn dernier "s dernière "s~
-#                                    │~
-#                                    └ doesn't contain a double quote~
+#     0  because :Pab drn dernier "s dernière "s˜
+#                                    │˜
+#                                    └ doesn't contain a double quote˜
 #
 #     IsShortAdj('drn', 'la')
-#     1  because :Pab drn dernier "s dernière "s~
-#                                             │~
-#                                             └ contains a double quote~
+#     1  because :Pab drn dernier "s dernière "s˜
+#                                             │˜
+#                                             └ contains a double quote˜
 
 # we use this function to check whether a given argument passed to `:Pab` is
 # a short version of an expansion, and should be transformed
@@ -511,7 +514,7 @@ def Pab( #{{{2
 
     # add support for manual expansion when one should have occurred but didn't; ex:
     #         la semaine drn
-    #         la semaine dernière~
+    #         la semaine dernière˜
     exe 'Aab ' .. abbr .. ' ' .. escape(l[0], ' ') .. (empty(en_args) ? '' : ' -- ' .. escape(en_args[0], ' '))
     #                            │{{{
     #                            └ The expansion could contain a space.
