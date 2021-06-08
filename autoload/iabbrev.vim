@@ -122,17 +122,17 @@ g:Unicode_ConvertDigraphSubset = [
 ]
 
 # By default, the only type of abbreviation which can be expanded in a word is
-# end-id: the end character is in 'isk', but not the others.
+# end-id: the end character is in 'iskeyword', but not the others.
 # But this is limited:
 #
 #    - works only at the end of a word (suffix)
-#    - the {lhs} must use only characters outside of 'isk' except the last one
-#      which must be in 'isk'
+#    - the {lhs} must use only  characters outside of 'iskeyword' except the last
+#      one which must be in 'iskeyword'
 #
 # Problem: What if we want to expand an abbreviation whose {lhs} is somewhere else?
 # Prefix, right in the middle of a word, anywhere ...
 # And what if the {lhs} we want doesn't follow the 2nd rule?
-# For example, what if we want a {lhs} whose last character is not in isk.
+# For example, what if we want a {lhs} whose last character is not in 'iskeyword'.
 #
 # Solution: We can  add special abbreviations in  the dictionary `anywhere_abbr`
 # and hit `C-]` to expand them.
@@ -143,14 +143,14 @@ g:Unicode_ConvertDigraphSubset = [
 # Usage:
 #     Aab xv ✔
 #
-# We may also pass a 2nd argument to `:Aab`; ex:
+# We may also pass a 2nd argument to `:Aab`; e.g.:
 #     Aab rmp remplacement replacement
 #
-# With 2 arguments, the abbreviation will look at `&spl` to decide whether it
-# must expand the abbreviation into the 1st or 2nd word.
+# With 2 arguments, the abbreviation will look at `&spelllang` to decide whether
+# it must expand the abbreviation into the 1st or 2nd word.
 
 # initialize `anywhere_abbr`
-# it's a dictionary, whose keys are abbreviations (ex: 'rmp'), and whose
+# it's a dictionary, whose keys are abbreviations (e.g.: 'rmp'), and whose
 # values are lists containing 1 or 2 words (ex: ['remplacement', 'replacement'])
 var anywhere_abbr: dict<list<string>>
 
@@ -202,7 +202,7 @@ def ExpandAnywhereAbbr(): string
 
             # ... we use the first/french expansion  if there's only one word in
             # `expansions` or if we're in a french buffer
-            var expansion: string = len(expansions) == 1 || &l:spl == 'fr'
+            var expansion: string = len(expansions) == 1 || &l:spelllang == 'fr'
                 ?     expansions[0]
                 :     expansions[1]
 
@@ -282,7 +282,7 @@ def ExpandAdj(abbr: string, expansion: string): string #{{{2
 
     var prev_word: string = GetPrevWord()
 
-    if &l:spl == 'en'
+    if &l:spelllang == 'en'
         return adj[abbr]['english']
     else
         if prev_word =~ '\c^\%(un\|le\|[mts]on\|ce\%(tte\)\@!\|au\|était\|est\|sera\)$'
@@ -304,13 +304,14 @@ def ExpandAdv(abbr: string, expansion: string): string #{{{2
     var prev_word: string = GetPrevWord()
     var to_capitalize: bool = ShouldWeCapitalize()
 
-    if &l:spl == 'en'
+    if &l:spelllang == 'en'
 
         # A french abbreviation (like `ctl`) shouldn't be expanded into an
         # english buffer.
-        # Without this check, in an english buffer, if we type a french
-        # abbreviation at the beginning of a line, which follows a line ending
-        # with a dot/bang/exclamation mark (ex: `autocmd!`), it's expanded like so:
+        # Without  this  check, in  an  english  buffer,  if  we type  a  french
+        # abbreviation at the  beginning of a line, which follows  a line ending
+        # with  a dot/bang/exclamation  mark (e.g.:  `autocmd!`), it's  expanded
+        # like so:
         #
         #     ctl
         #     Ctl,˜
@@ -343,7 +344,7 @@ enddef
 def ExpandNoun(abbr: string, expansion: string): string #{{{2
     var prev_word: string = GetPrevWord()
 
-    if &l:spl == 'en'
+    if &l:spelllang == 'en'
         # A french abbreviation (like `dcl`) shouldn't be expanded into an
         # english buffer.
         # Without this check, in an english buffer, if we type `some dcl`,
@@ -398,7 +399,7 @@ enddef
 def ExpandVerb(abbr: string, expansion: string): string #{{{2
     var prev_word: string = GetPrevWord()
 
-    if &l:spl == 'en'
+    if &l:spelllang == 'en'
         if prev_word =~ '^\c\%(s\=he\|it\)$'
             return verb[abbr]['en_s']
 
@@ -512,9 +513,9 @@ def Pab( #{{{2
     var en_args: list<string>
     [fr_args, en_args] = SeparateArgsEnfr(l)->deepcopy()
 
-    # add support for manual expansion when one should have occurred but didn't; ex:
-    #         la semaine drn
-    #         la semaine dernière˜
+    # add support for manual expansion when one should have occurred but didn't; e.g.:
+    #     la semaine drn
+    #     la semaine dernière˜
     exe 'Aab ' .. abbr .. ' ' .. escape(l[0], ' ') .. (empty(en_args) ? '' : ' -- ' .. escape(en_args[0], ' '))
     #                            │{{{
     #                            └ The expansion could contain a space.
@@ -655,10 +656,10 @@ enddef
 
 def ShouldWeCapitalize(): bool #{{{2
 # Should `bdf` be expanded into `by default` or into `By default,`?
-    var cml: string = !empty(&l:cms)
+    var cml: string = !empty(&l:commentstring)
         ?    '\V'
           .. '\%('
-          ..     &l:cms->matchstr('\S*\ze\s*%s')->escape('\')
+          ..     &l:commentstring->matchstr('\S*\ze\s*%s')->escape('\')
           .. '\)\='
           .. '\m'
         : ''
