@@ -7,17 +7,17 @@ var loaded = true
 def LazyLoadVimIabbrev() #{{{2
     # The goal of  this function is to  make sure our digraphs are  accessible if we
     # enter replace mode without having entered insert mode during the session.
-    au! LazyLoadVimIabbrev
-    # `sil!` to suppress `E936: Cannot delete the current group`.
+    autocmd! LazyLoadVimIabbrev
+    # `silent!` to suppress `E936: Cannot delete the current group`.
     # Only seems to happen when starting in debug mode: `$ vim -D`.
-    sil! aug! LazyLoadVimIabbrev
-    exe 'so ' .. fnameescape(AUTOLOAD_SCRIPT)
-    sil! unmap r
+    silent! augroup! LazyLoadVimIabbrev
+    execute 'source ' .. fnameescape(AUTOLOAD_SCRIPT)
+    silent! unmap r
 enddef
 #}}}1
 # Mapping {{{1
 
-nno r <cmd>call <sid>LazyLoadVimIabbrev()<cr>r
+nnoremap r <Cmd>call <SID>LazyLoadVimIabbrev()<CR>r
 
 # Variables {{{1
 
@@ -38,11 +38,11 @@ const AUTOLOAD_SCRIPT: string = expand('<sfile>:p:h:h') .. '/autoload/' .. expan
 #             > n
 #             ...
 #}}}
-augroup LazyLoadVimIabbrev | au!
+augroup LazyLoadVimIabbrev | autocmd!
     # Why `CmdlineEnter`?{{{
     #
     # Digraphs  should be  accessible on  the  command-line even  if we  haven't
     # entered insert mode at least once.
     #}}}
-    au InsertEnter,CmdlineEnter * LazyLoadVimIabbrev()
+    autocmd InsertEnter,CmdlineEnter * LazyLoadVimIabbrev()
 augroup END

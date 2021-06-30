@@ -164,14 +164,14 @@ var anywhere_abbr: dict<list<string>>
 #     let lhs = args[0]
 #     let rhs = args[1 :]
 #}}}
-com -nargs=+ Aab AddAnywhereAbbr(<f-args>)
+command -nargs=+ Aab AddAnywhereAbbr(<f-args>)
 
 def AddAnywhereAbbr(lhs: string, ...l: list<string>)
     var rhs: list<string> = l
         ->join()
-        # The default mapping or abbreviations commands (like :ino or
-        # :inorea) automatically translate control characters.
-        # Our custom command :Aab should do the same.
+        # The  default mapping  or abbreviations  commands (like  `:inoremap` or
+        # `:inoreabbrev`) automatically translate control characters.
+        # Our custom command `:Aab` should do the same.
         ->substitute('<CR>', "\<CR>", 'g')
         ->substitute('<Esc>', "\<Esc>", 'g')
         ->split('\s*--\s*')
@@ -218,7 +218,7 @@ def ExpandAnywhereAbbr(): string
     return "\<C-]>"
 enddef
 
-ino <expr><unique> <C-]> <sid>ExpandAnywhereAbbr()
+inoremap <expr><unique> <C-]> <SID>ExpandAnywhereAbbr()
 
 # BRACKET EXPANSION ON THE CHEAP
 #
@@ -236,12 +236,12 @@ def InstallBracketExpansionAbbrev(brackets: string)
     var closing_bracket: string = brackets[1]
 
     # ( [ {
-    exe 'Aab ' .. opening_bracket .. ' ' .. opening_bracket .. "\<CR>" .. closing_bracket .. "\<Esc>O"
+    execute 'Aab ' .. opening_bracket .. ' ' .. opening_bracket .. "\<CR>" .. closing_bracket .. "\<Esc>O"
 
     # [, {, [; {;
     if opening_bracket =~ '[[{]'
-        exe 'Aab ' .. opening_bracket .. ', ' .. opening_bracket .. "\<CR>" .. closing_bracket .. ",\<Esc>O"
-        exe 'Aab ' .. opening_bracket .. '; ' .. opening_bracket .. "\<CR>" .. closing_bracket .. ";\<Esc>O"
+        execute 'Aab ' .. opening_bracket .. ', ' .. opening_bracket .. "\<CR>" .. closing_bracket .. ",\<Esc>O"
+        execute 'Aab ' .. opening_bracket .. '; ' .. opening_bracket .. "\<CR>" .. closing_bracket .. ";\<Esc>O"
     endif
 enddef
 
@@ -252,7 +252,7 @@ InstallBracketExpansionAbbrev('{}')
 # Automatic {{{1
 
 # This command should simply move the cursor on a duplicate abbreviation.
-com -bar FindDuplicateAbbreviation FindDuplicateAbbreviation()
+command -bar FindDuplicateAbbreviation FindDuplicateAbbreviation()
 # Do *not* add the  `-buffer` attribute to the command.  It  would be applied to
 # the buffer that Vim opens during a session.
 
@@ -516,17 +516,19 @@ def Pab( #{{{2
     # add support for manual expansion when one should have occurred but didn't; e.g.:
     #     la semaine drn
     #     la semaine dernière˜
-    exe 'Aab ' .. abbr .. ' ' .. escape(l[0], ' ') .. (empty(en_args) ? '' : ' -- ' .. escape(en_args[0], ' '))
-    #                            │{{{
-    #                            └ The expansion could contain a space.
-    #
-    # If it does, we need to escape it.
-    # Otherwise, when we manually expand the abbreviation, we would only get the
-    # last word.
-    # MWE:
-    # Try `bdf C-v SPC C-]`.
-    # Instead of getting `by default`, we would get `default`.
-    #}}}
+    execute 'Aab ' .. abbr
+        # The expansion could contain a space. {{{
+        #
+        # If it does, we need to escape it.
+        # Otherwise, when we manually expand the abbreviation, we would only get
+        # the last word.
+        #
+        # MWE:
+        # Try `bdf C-v SPC C-]`.
+        # Instead of getting `by default`, we would get `default`.
+        #}}}
+        .. ' ' .. escape(l[0], ' ')
+        .. (empty(en_args) ? '' : ' -- ' .. escape(en_args[0], ' '))
 
     if nature == 'adj'
 
@@ -548,19 +550,19 @@ def Pab( #{{{2
                     ?     v
                     :     adj[abbr][k == 'les' ? 'le' : 'la'] .. adj[abbr][k][1 :])
 
-        # Example of command executed by the next `exe`:
+        # Example of command executed by the next `execute`:
         #
-        #     inorea <silent> tpr <c-r>=<sid>ExpandAdj('tpr', 'temporaire')<cr>
-        #                                                      │
-        #                                                      └ returned by `GetExpansion('tpr', 'adj')`
+        #     inoreabbrev <silent> tpr <C-R>=<SID>ExpandAdj('tpr', 'temporaire')<CR>
+        #                                                           │
+        #                                                           └ returned by `GetExpansion('tpr', 'adj')`
         #
         # We need `GetExpansion()` because we don't know what's the key
         # inside `adj['tpr']`, containing the first true expansion of the
         # abbreviation.
         # Indeed, maybe the abbreviation is only expanded in english or only in french.
-        exe 'inorea <silent> ' .. abbr
-             .. ' <c-r>=<sid>ExpandAdj(' .. string(abbr)
-             .. ', ' .. GetExpansion(abbr, 'adj')->string() .. ')<cr>'
+        execute 'inoreabbrev <silent> ' .. abbr
+             .. ' <C-R>=<SID>ExpandAdj(' .. string(abbr)
+             .. ', ' .. GetExpansion(abbr, 'adj')->string() .. ')<CR>'
 
     elseif nature == 'adv'
         adv[abbr] = {
@@ -568,9 +570,9 @@ def Pab( #{{{2
             english: get(en_args, 0, abbr),
         }
 
-        exe 'inorea <silent> ' .. abbr
-            .. ' <c-r>=<sid>ExpandAdv(' .. string(abbr)
-            .. ', ' .. GetExpansion(abbr, 'adv')->string() .. ')<cr>'
+        execute 'inoreabbrev <silent> ' .. abbr
+            .. ' <C-R>=<SID>ExpandAdv(' .. string(abbr)
+            .. ', ' .. GetExpansion(abbr, 'adv')->string() .. ')<CR>'
 
     elseif nature == 'noun'
 
@@ -586,9 +588,9 @@ def Pab( #{{{2
             english: get(en_args, 0, abbr),
         }
 
-        exe 'inorea <silent> ' .. abbr
-            .. ' <c-r>=<sid>ExpandNoun(' .. string(abbr)
-            .. ', ' .. GetExpansion(abbr, 'noun')->string() .. ')<cr>'
+        execute 'inoreabbrev <silent> ' .. abbr
+            .. ' <C-R>=<SID>ExpandNoun(' .. string(abbr)
+            .. ', ' .. GetExpansion(abbr, 'noun')->string() .. ')<CR>'
 
     elseif nature == 'verb'
         verb[abbr] = {
@@ -612,9 +614,9 @@ def Pab( #{{{2
                 } )
         endif
 
-        exe 'inorea <silent> ' .. abbr
-            .. ' <c-r>=<sid>ExpandVerb(' .. string(abbr)
-            .. ', ' .. GetExpansion(abbr, 'verb')->string() .. ')<cr>'
+        execute 'inoreabbrev <silent> ' .. abbr
+            .. ' <C-R>=<SID>ExpandVerb(' .. string(abbr)
+            .. ', ' .. GetExpansion(abbr, 'verb')->string() .. ')<CR>'
     endif
 enddef
 
@@ -676,9 +678,9 @@ enddef
 
 # abbreviations {{{2
 
-#            ┌ Poly abbreviation
-#            │
-com -nargs=+ Pab Pab(<f-args>)
+#                ┌ Poly abbreviation
+#                │
+command -nargs=+ Pab Pab(<f-args>)
 
 # TODO:
 # add support for cycling, to get feminine plural and maybe for verb conjugations
@@ -706,9 +708,9 @@ Pab adv  trm   autrement -- otherwise
 
 # The following words are not all adverbs, but the “adverb” category seems to be
 # appropriate here.  It contains words wose form never changes (no conjugation).
-# Why do you use `:Pab` instead of `:inorea`?{{{
+# Why do you use `:Pab` instead of `:inoreabbrev`?{{{
 #
-# `:inorea`  would make  the abbreviation  be  triggered no  matter the  current
+# `:inoreabbrev` would make the abbreviation  be triggered no matter the current
 # language we're typing in.
 # Having a french  abbreviation being triggered while typing code  or writing in
 # english is annoying.
@@ -717,7 +719,7 @@ Pab adv  trm   autrement -- otherwise
 #}}}
 Pab adv  ac    avec
 # Alternative:
-#     inorea <silent> ar <c-r>=<sid>ShouldWeCapitalize() ? 'As a result,' : 'as a result'<cr>
+#     inoreabbrev <silent> ar <C-R>=<SID>ShouldWeCapitalize() ? 'As a result,' : 'as a result'<CR>
 Pab adv  aar   -- as\ a\ result
 Pab adv  cm    comme
 Pab adv  crr   correspondant\ à
@@ -779,22 +781,22 @@ Pab verb  rpl  remplacer remplace remplacent remplacé remplaçant -- replace
 Pab verb  rtr  retourner retourne retournent retourné retournant -- return
 Pab verb  lls  illustrer illustre illustrent illustré illustrant
 
-inorea  dsn  doesn't
-inorea  fm   FIXME
-exe 'inorea  fmi   For more info, see:<cr>   '
-inorea  ie   i.e.
-inorea  izn  isn't
-inorea  lx   LaTeX
-inorea  ot   to
-inorea  ptt  pattern
-inorea  svr  several
-inorea  tcm  autocmd
-inorea  td   TODO
-inorea  vai  via
-inorea  wsp  whitespace
+inoreabbrev  dsn  doesn't
+inoreabbrev  fm   FIXME
+execute 'inoreabbrev  fmi   For more info, see:<CR>   '
+inoreabbrev  ie   i.e.
+inoreabbrev  izn  isn't
+inoreabbrev  lx   LaTeX
+inoreabbrev  ot   to
+inoreabbrev  ptt  pattern
+inoreabbrev  svr  several
+inoreabbrev  tcm  autocmd
+inoreabbrev  td   TODO
+inoreabbrev  vai  via
+inoreabbrev  wsp  whitespace
 # }}}1
 # Teardown {{{1
 
-delc Aab
-delc Pab
+delcommand Aab
+delcommand Pab
 
