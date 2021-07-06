@@ -1,8 +1,5 @@
 vim9script noclear
 
-if exists('loaded') | finish | endif
-var loaded = true
-
 # Don't move the `Manual` section after the `Automatic`, because `Pab()`
 # relies on `:Aab`.
 # Manual {{{1
@@ -179,10 +176,7 @@ def AddAnywhereAbbr(lhs: string, ...l: list<string>)
 enddef
 
 def ExpandAnywhereAbbr(): string
-    # iterate over the abbreviations in `anywhere_abbr`
-    var keys: list<string> = keys(anywhere_abbr)
-
-    for key in keys
+    for [key, value] in anywhere_abbr->items()
         # capture the text befothe cursor with a possible space at the end
         # why a space?
         #
@@ -193,12 +187,12 @@ def ExpandAnywhereAbbr(): string
         # we could hit `C-]` right after the abbreviation (no space between it
         # and the cursor), OR after a space
         var text_before_cursor: string = getline('.')
-            ->matchstr(repeat('.', strcharlen(key)) .. ' \=\%' .. col('.') .. 'c')
+            ->matchstr(repeat('.', strcharlen(key)) .. ' \=\%.c')
         var after_space: bool = stridx(text_before_cursor, ' ') >= 0
 
         # if one of them matches the word before the cursor ...
         if text_before_cursor == key || text_before_cursor == key .. ' '
-            var expansions: list<string> = anywhere_abbr[key]
+            var expansions: list<string> = value
 
             # ... we use the first/french expansion  if there's only one word in
             # `expansions` or if we're in a french buffer
@@ -545,7 +539,7 @@ def Pab( #{{{2
         #     Pab adj crn courant    "s  courante  "es  --  current
         #     Pab adj drn dernier    "s  dernière  "s
         adj[abbr]
-            ->map((k: string, v: string): string =>
+            ->map((k: string, v: string) =>
                     !IsShortAdj(abbr, k)
                     ?     v
                     :     adj[abbr][k == 'les' ? 'le' : 'la'] .. adj[abbr][k][1 :])
@@ -666,8 +660,8 @@ def ShouldWeCapitalize(): bool #{{{2
           .. '\m'
         : ''
     var line: string = getline('.')
-    var after_dot: bool = match(line, '\%(\.\|?|!\)\s\+\%' .. col('.') .. 'c') >= 0
-    var after_nothing: bool = match(line, '^\s*' .. cml .. '\s*\%' .. col('.') .. 'c') >= 0
+    var after_dot: bool = match(line, '\%(\.\|?|!\)\s\+\%.c') >= 0
+    var after_nothing: bool = match(line, '^\s*' .. cml .. '\s*\%.c') >= 0
     var dot_on_prev_line: bool = (line('.') - 1)->getline()->match('\%(\.\|?\|!\)\s*$') >= 0
     var empty_prev_line: bool = (line('.') - 1)->getline()->match('^\s*$') >= 0
 

@@ -17,7 +17,7 @@ enddef
 #}}}1
 # Mapping {{{1
 
-nnoremap r <Cmd>call <SID>LazyLoadVimIabbrev()<CR>r
+nnoremap <unique> r <Cmd>call <SID>LazyLoadVimIabbrev()<CR>r
 
 # Variables {{{1
 
@@ -33,7 +33,7 @@ const AUTOLOAD_SCRIPT: string = expand('<sfile>:p:h:h') .. '/autoload/' .. expan
 #             > f[inish]
 #             > f
 #             ...
-#             " vim-iabbrev
+#             # vim-iabbrev
 #             > n[ext]
 #             > n
 #             ...
