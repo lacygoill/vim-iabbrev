@@ -176,7 +176,7 @@ def AddAnywhereAbbr(lhs: string, ...l: list<string>)
 enddef
 
 def ExpandAnywhereAbbr(): string
-    for [key, value] in anywhere_abbr->items()
+    for [key: string, value: list<string>] in anywhere_abbr->items()
         # capture the text befothe cursor with a possible space at the end
         # why a space?
         #
