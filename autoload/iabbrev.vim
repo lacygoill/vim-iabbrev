@@ -4,59 +4,40 @@ vim9script noclear
 # relies on `:Aab`.
 # Manual {{{1
 
-# no-break space
-digraphs ns 160
+var digraphs: list<string> =<< trim END
+    ns  
+    o/ ∅
+    ok ✔
+    no ✘
+    aa â
+    ee ê
+    ii î
+    oo ô
+    uu û
+    um ù
+    pp …
+    tl ┌
+    bl └
+    tr ┐
+    br ┘
+    fa ∀
+    te ∃
+    e_ ∈
+    e/ ∉
+    co ⊥
+    an ∧
+    or ∨
+    |v ↓
+    |^ ↑
+    |> ↳
+    =~ ≈
+    f> →
+    ti ˜
+END
 
-# ∅
-digraphs o/ 8709
-
-# ✔ ✘
-digraphs ok 10004 no 10008
-
-# â ê î ô û
-digraphs aa 226 ee 234 ii 238 oo 244 uu 251
-
-# ù
-# Why `m`? It's close to the `ù` key.
-digraphs um 249
-
-# …
-digraphs pp 8230
-
-# ┌ ┐ └ ┘
-digraphs tl 9484 tr 9488 bl 9492 br 9496
-#        │       │       │       │
-#        │       │       │       └ Bottom Right
-#        │       │       └ Bottom Left
-#        │       └ Top Right
-#        └ Top Left
-
-# ∀ ∃
-digraphs fa 8704 te 8707
-
-# ∈ ∉
-digraphs e_ 8712 e/ 8713
-
-# ⊥
-digraphs co 8869
-
-# ∧ ∨
-digraphs an 8743 or 8744
-
-# ↓ ↑ ↳
-digraph \|v 8595 \|^ 8593 \|> 8627
-
-# ≈
-digraphs =~ 8776
-
-# →
-# I often type `C-k f >` instead of `C-k - >`.
-# Handle this typo.
-digraphs f> 8594
-
-# ˜
-digraphs ti 732
-
+digraphs
+    ->mapnew((_, v: string): list<string> => v->split())
+    ->setdigraphlist()
 
 # `crg` is mapped to an operator defined in the unicode.vim plugin.
 # It searches for every pair of characters inside a text-object matching
